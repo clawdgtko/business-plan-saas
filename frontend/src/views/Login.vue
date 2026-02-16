@@ -21,16 +21,25 @@
           
           <button 
             type="submit"
-            :disabled="loading"
+            :disabled="authStore.loading"
             class="w-full bg-primary-600 text-white py-2 rounded-lg hover:bg-primary-700 disabled:opacity-50"
           >
-            {{ loading ? 'Envoi...' : 'Recevoir le lien' }}
+            {{ authStore.loading ? 'Envoi...' : 'Recevoir le lien' }}
           </button>
         </form>
 
-        <p v-if="message" class="mt-4 text-center text-green-600">
-          {{ message }}
+        <p v-if="authStore.error" class="mt-4 text-center text-red-600">
+          {{ authStore.error }}
         </p>
+
+        <div v-if="sent" class="mt-4 p-4 bg-green-50 rounded-lg">
+          <p class="text-center text-green-700">
+            ✅ Lien envoyé ! Vérifiez votre email.
+          </p>
+          <p v-if="authStore.devLink" class="mt-2 text-xs text-gray-500 break-all">
+            Dev: {{ authStore.devLink }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -38,18 +47,18 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useAuthStore } from '../stores/auth.js'
 
 const email = ref('')
-const loading = ref(false)
-const message = ref('')
+const authStore = useAuthStore()
+const sent = ref(false)
 
 async function handleLogin() {
-  loading.value = true
-  
-  // TODO: Call API to send magic link
-  await new Promise(r => setTimeout(r, 1000))
-  
-  message.value = 'Lien envoyé ! Vérifiez votre email.'
-  loading.value = false
+  try {
+    const data = await authStore.requestMagicLink(email.value)
+    sent.value = true
+  } catch (e) {
+    // Error handled in store
+  }
 }
 </script>
