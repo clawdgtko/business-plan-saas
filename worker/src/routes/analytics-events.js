@@ -5,7 +5,7 @@
 
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { validateBody } from '../validators/index.js'
+import { validateBody } from '../middleware/validation.js'
 
 const app = new Hono()
 
@@ -66,7 +66,7 @@ const batchEventSchema = z.object({
  */
 app.post('/event', validateBody(singleEventSchema), async (c) => {
   const { DB } = c.env
-  const eventData = c.get('validatedBody')
+  const eventData = c.get('validatedData')
   
   try {
     const eventId = crypto.randomUUID()
@@ -124,7 +124,7 @@ app.post('/event', validateBody(singleEventSchema), async (c) => {
  */
 app.post('/event/batch', validateBody(batchEventSchema), async (c) => {
   const { DB } = c.env
-  const { events, batch_metadata } = c.get('validatedBody')
+  const { events, batch_metadata } = c.get('validatedData')
   
   try {
     const results = []

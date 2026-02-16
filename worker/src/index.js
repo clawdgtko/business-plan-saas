@@ -14,6 +14,9 @@ import onboardingRoutes from './routes/onboarding.js'
 import analyticsRoutes from './routes/analytics.js'
 import analyticsEventsRoutes from './routes/analytics-events.js'
 import adminRoutes from './routes/admin.js'
+import feedbackRoutes from './routes/feedback.js'
+import abTestingRoutes from './routes/ab-testing.js'
+import heatmapRoutes from './routes/heatmap.js'
 
 // Import middleware
 import { auth } from './middleware/auth.js'
@@ -54,6 +57,9 @@ app.route('/api/onboarding', onboardingRoutes)
 app.route('/api/analytics', analyticsRoutes)
 app.route('/api/analytics', analyticsEventsRoutes)
 app.route('/api/admin', adminRoutes)
+app.route('/api/feedback', feedbackRoutes)
+app.route('/api/ab-test', abTestingRoutes)
+app.route('/api/heatmap', heatmapRoutes)
 
 // 404 handler
 app.notFound((c) => {

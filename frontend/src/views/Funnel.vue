@@ -591,12 +591,24 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, watch } from 'vue'
+import { ref, reactive, computed, onMounted, watch, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGuestStore } from '../stores/guest.js'
 import { useBusinessPlanStore } from '../stores/businessPlan.js'
 import AutoSaveIndicator from '../components/AutoSaveIndicator.vue'
 import StepTransition from '../components/StepTransition.vue'
+import { useABTest, ABTests } from '../utils/ab-testing.js'
+import { 
+  trackOnboardingStep, 
+  OnboardingSteps,
+  trackFormError,
+  trackStepBack,
+  trackDropoff,
+  useStepTimer,
+  useFieldTracker,
+  sendFinalReport
+} from '../utils/onboarding-analytics.js'
+import { trackConversion } from '../utils/analytics.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -854,6 +866,19 @@ watch(competitorsList, () => {
 
 // Load existing data
 onMounted(async () => {
+  // Initialize A/B Testing for funnel
+  const funnelABTest = useABTest(ABTests.FUNNEL_CTA.id)
+  const stepsABTest = useABTest(ABTests.FUNNEL_STEPS.id)
+  
+  // Track funnel start
+  trackOnboardingStep(OnboardingSteps.FUNNEL_START, {
+    variant: funnelABTest.variant,
+    stepsVariant: stepsABTest.variant
+  })
+  
+  // Start step timer
+  stepTimer = useStepTimer('funnel_business_info')
+  
   // Load from guest store
   if (guestStore.hasFunnelData) {
     const saved = guestStore.getFunnelData()
@@ -874,6 +899,98 @@ onMounted(async () => {
     } catch (error) {
       console.error('Failed to load business plan:', error)
     }
+  }
+})
+
+// Enhanced methods with tracking
+let stepTimer = null
+
+// Override nextStep with tracking
+const originalNextStep = nextStep
+nextStep = function() {
+  if (currentStepIndex.value < steps.length - 1 && isCurrentStepValid.value) {
+    // Track step completion
+    const stepMapping = {
+      'business-info': OnboardingSteps.FUNNEL_STEP_BUSINESS,
+      'market': OnboardingSteps.FUNNEL_STEP_MARKET,
+      'financial': OnboardingSteps.FUNNEL_STEP_FINANCIAL,
+      'review': OnboardingSteps.FUNNEL_STEP_REVIEW
+    }
+    
+    const currentStepId = currentStep.value.id
+    if (stepTimer) {
+      stepTimer.stop()
+    }
+    
+    trackOnboardingStep(stepMapping[currentStepId] || currentStepId, {
+      stepIndex: currentStepIndex.value,
+      totalSteps: steps.length
+    })
+    
+    // Track step transition
+    trackConversion('funnel_step_complete', { 
+      step: currentStepId, 
+      stepIndex: currentStepIndex.value 
+    })
+    
+    originalNextStep()
+    
+    // Start timer for next step
+    const nextStepId = steps[currentStepIndex.value]?.id
+    stepTimer = useStepTimer(`funnel_${nextStepId}`)
+  }
+}
+
+// Override prevStep with tracking
+const originalPrevStep = prevStep
+prevStep = function() {
+  if (currentStepIndex.value > 0) {
+    const fromStep = steps[currentStepIndex.value]?.id
+    const toStep = steps[currentStepIndex.value - 1]?.id
+    trackStepBack(fromStep, toStep)
+    originalPrevStep()
+  }
+}
+
+// Override goToCheckout with tracking
+const originalGoToCheckout = goToCheckout
+goToCheckout = function() {
+  // Track funnel completion
+  trackOnboardingStep(OnboardingSteps.FUNNEL_COMPLETE)
+  
+  // Track conversion for A/B test
+  const funnelABTest = useABTest(ABTests.FUNNEL_CTA.id)
+  funnelABTest.trackConversion('funnel_complete', {
+    stepsCompleted: currentStepIndex.value + 1,
+    businessName: formData.businessName
+  })
+  
+  // Track checkout start
+  trackOnboardingStep(OnboardingSteps.CHECKOUT_START)
+  trackConversion('checkout_start', { source: 'funnel' })
+  
+  // Send final report
+  sendFinalReport()
+  
+  originalGoToCheckout()
+}
+
+// Track form errors
+const originalValidateField = validateField
+validateField = function(field) {
+  originalValidateField(field)
+  
+  if (validationErrors[field]) {
+    trackFormError(field, 'validation', validationErrors[field])
+  }
+}
+
+// Track dropoff on unmount
+onUnmounted(() => {
+  // Check if funnel was completed
+  const stats = JSON.parse(localStorage.getItem('onboarding_progress') || '{}')
+  if (!stats[OnboardingSteps.CHECKOUT_START]) {
+    trackDropoff(currentStep.value.id, 'page_leave')
   }
 })
 </script>

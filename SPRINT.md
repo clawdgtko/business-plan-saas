@@ -1,91 +1,73 @@
-# 🎯 SPRINT SYSTEM - Business Plan SaaS
+# 🚀 SPRINT #4 - Security & Performance
 
-**Sprint Actif:** #2 🚀 EN COURS  
-**Date début:** 2026-02-16 10:13  
-**Durée:** 32 min (sprint rapide)  
-**Fin prévue:** 2026-02-16 10:45  
-**Status:** 🟢 LANCÉ - GO Grégoire reçu
+**Date:** 2026-02-16  
+**Démarré:** 17:45  
+**Fin prévue:** 19:45 (2h)
 
 ---
 
-## 🎉 Sprint #1 - TERMINÉ ✅
+## 👥 Équipe Assignée
 
-### Livrés:
-- ✅ Auth Magic Link
-- ✅ CRUD Business Plan
-- ✅ Stripe Checkout
-- ✅ CI/CD GitHub Actions
-- ✅ App déployée
-- ✅ Security & Rate limiting
-- ✅ Onboarding flow
-- ✅ Monitoring & Telemetry
-- ✅ Feature Flags
-
-### Reste (dette Sprint #2):
-- 🟡 Tests coverage > 80% (~30% actuel)
-- 🟡 Documentation API
-- 🟡 Persistence onboarding
+| Agent | Mission | Issue | Statut |
+|-------|---------|-------|--------|
+| @BackendAgent | Security & Secrets Management | #55 | 🟢 En cours |
+| @DevOpsAgent | Infrastructure & Monitoring | #70 | 🟢 En cours |
+| @UXDesigner | A/B Testing & Feedback | #58, #59, #60 | 🟢 En cours |
+| @FrontendAgent | Performance & Accessibilité | - | 🟢 En cours |
 
 ---
 
-## 🚀 Sprint #2 - DASHBOARD & SUBSCRIPTION
+## 🎯 Objectifs Sprint
 
-### Objectif
-**MVP COMPLET:** Dashboard utilisateur + Subscription 39,80€/mois
+### Backend (#55) - Security
+- [ ] Gestion sécurisée des secrets (Vault/1Password)
+- [ ] Séparation prod/staging secrets
+- [ ] Rotation automatique JWT
+- [ ] Documentation sécurité
 
-### Livrables attendus:
-- [ ] Tests coverage ≥ 80%
-- [ ] Documentation API complète
-- [ ] Persistence onboarding backend
-- [ ] Dashboard utilisateur (US-006)
-- [ ] Subscription flow (US-007)
-- [ ] Emails transactionnels
+### DevOps (#70) - Infrastructure
+- [ ] Alertes automatisées (email/Discord)
+- [ ] Health checks avancés
+- [ ] Log aggregation
+- [ ] Backup D1 automatique
 
----
+### UX (#58, #59, #60) - Analytics
+- [ ] Système feedback in-app
+- [ ] Setup A/B testing
+- [ ] Analytics onboarding
+- [ ] Heatmap tracking
 
-## 📋 Planning Sprint #2 (2h)
-
-| Heure | Action | Status |
-|-------|--------|--------|
-| 09:45 | Kickoff Sprint #2 | 🟡 En attente GO |
-| 09:50 | Création branches | - |
-| 10:00 | Check-in #1 | - |
-| 10:30 | Check-in #2 | - |
-| 11:00 | Check-in #3 | - |
-| 11:30 | Final review | - |
-| 11:45 | Sprint Review | - |
-
----
-
-## 👥 Équipe Sprint #2
-
-| Agent | Tâche | Issue |
-|-------|-------|-------|
-| @BackendAgent | Doc API + Persistence + Subscription | #81, #82, #84 |
-| @FrontendAgent | Dashboard + Subscription UI | #83, #85 |
-| @QAEngineer | Tests coverage 80% | #80 |
-| @DevOpsAgent | Emails + Analytics | #86, #89 |
-| @UXDesigner | Copywriting | #88 |
+### Frontend - Performance
+- [ ] Core Web Vitals optimisation
+- [ ] Lazy loading
+- [ ] Accessibilité WCAG 2.1 AA
+- [ ] PWA offline mode
 
 ---
 
-## 📁 Documents
+## 📊 Métriques
 
-- **Planning complet:** `SPRINT_2.md`
-- **Proposition à valider:** `docs/PROPOSITION_SPRINT_2.md`
-- **PR:** `feature/sprint-2-planning` → `main`
+**Objectif:** 4 features en 2h = 2 features/heure
 
----
-
-## ✅ Checklist Lancement
-
-- [ ] Validation Grégoire du scope
-- [ ] Validation LeadDev des priorités
-- [ ] Merge PR planning
-- [ ] Création issues GitHub
-- [ ] Kickoff équipe
+**Critères de succès:**
+- Toutes les PRs mergées
+- Tests pass
+- Documentation à jour
+- Déploiement automatique
 
 ---
 
-*En attente GO Grégoire pour lancement Sprint #2*  
-*Dernière mise à jour: 2026-02-16 09:45*
+## 🕐 Timeline
+
+| Heure | Action |
+|-------|--------|
+| 17:45 | 🚀 Démarrage Sprint #4 |
+| 18:15 | Checkpoint 30min |
+| 18:45 | Checkpoint 1h |
+| 19:15 | Finalisation |
+| 19:45 | 🎉 Clôture & Merge |
+
+---
+
+**Status:** 🟢 EN COURS  
+**Progression:** 1/4 agents ont reporté (Backend)
