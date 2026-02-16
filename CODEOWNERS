@@ -1,27 +1,99 @@
 # Code Owners - Business Plan SaaS
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
-# Global fallback - tous les fichiers
-* @clawdgtko
+# ⚠️ PROTECTIONS DE BRANCHE (à configurer dans GitHub Settings)
+# main: 2 approbations requises + checks passants
+# develop: 1 approbation requise
 
-# Backend API - review dev requis
-/src/api/ @clawdgtko
-/src/db/ @clawdgtko
+# ============================================================
+# RELEASE MANAGEMENT
+# ============================================================
 
+# Processus de release
+/docs/RELEASE_PROCESS.md @clawdgtko @lead-dev
+docs/CHANGELOG.md @release-manager @lead-dev
+scripts/version.sh @release-manager @devops
+
+# CI/CD workflows
+.github/workflows/ @devops @lead-dev
+
+# ============================================================
+# GLOBAL FALLBACK
+# ============================================================
+
+# Tous les fichiers (fallback)
+* @clawdgtko @lead-dev
+
+# ============================================================
+# BACKEND API
+# ============================================================
+
+/src/api/ @lead-dev @clawdgtko
+/src/db/ @lead-dev @clawdgtko
+/worker/ @lead-dev @clawdgtko
+/wrangler.toml @devops @lead-dev
+
+# ============================================================
 # 🔥 PAIEMENT - QA Engineer OBLIGATOIRE
-# Toute modification du système de paiement doit être approuvée par QA
-/src/billing/ @clawdgtko
-/src/stripe/ @clawdgtko
-/src/webhooks/ @clawdgtko
-/src/subscriptions/ @clawdgtko
-/src/payment/ @clawdgtko
-/src/pricing/ @clawdgtko
+# ============================================================
+# Toute modification du système de paiement DOIT être approuvée
+# par QA. Aucun merge sans validation.
+# ============================================================
 
-# Tests Stripe - QA review required
-/tests/stripe/ @clawdgtko
-/tests/billing/ @clawdgtko
-/tests/e2e/payment/ @clawdgtko
+/src/billing/ @qa-engineer @clawdgtko
+/src/stripe/ @qa-engineer @clawdgtko
+/src/webhooks/ @qa-engineer @clawdgtko
+/src/subscriptions/ @qa-engineer @clawdgtko
+/src/payment/ @qa-engineer @clawdgtko
+/src/pricing/ @qa-engineer @clawdgtko
 
-# Infrastructure critique
-/wrangler.toml @clawdgtko
-.github/workflows/ @clawdgtko
+# Tests Paiement - Review QA requise
+/tests/stripe/ @qa-engineer @clawdgtko
+/tests/billing/ @qa-engineer @clawdgtko
+/tests/e2e/payment/ @qa-engineer @clawdgtko
+
+# ============================================================
+# FRONTEND
+# ============================================================
+
+/frontend/ @lead-dev @frontend-dev
+/src/components/ @frontend-dev @lead-dev
+
+# ============================================================
+# DOCUMENTATION
+# ============================================================
+
+/docs/ @product-manager @clawdgtko
+README.md @product-manager @clawdgtko
+PRODUCT.md @product-manager @clawdgtko
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
+package.json @lead-dev @release-manager
+package-lock.json @lead-dev @release-manager
+.eslintrc* @lead-dev
+.prettierrc* @lead-dev
+tsconfig.json @lead-dev
+vite.config.ts @lead-dev
+
+# ============================================================
+# NOTES
+# ============================================================
+# 
+# @clawdgtko       = Product Manager / QA Engineer
+# @lead-dev        = Lead Developer
+# @devops          = DevOps Engineer
+# @qa-engineer     = QA Engineer
+# @frontend-dev    = Frontend Developer
+# @release-manager = Release Manager
+#
+# Format: pattern @user1 @user2
+# - Le premier user est le reviewer principal
+# - Le second est le reviewer secondaire
+# - Tous les users listés doivent approuver pour les branches protégées
+#
+# Configuration GitHub (Settings > Branches):
+# - main: Require 2 approvals, dismiss stale reviews, require status checks
+# - develop: Require 1 approval, require status checks
