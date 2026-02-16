@@ -86,7 +86,7 @@ Besoin Grégoire: OUI/NON
 - ✅ Onboarding
 - ✅ User Journey
 
-**Date cible:** 2026-02-18 (2 jours)
+**Date cible:** 2026-02-16 10:45 (2h max)
 
 ---
 

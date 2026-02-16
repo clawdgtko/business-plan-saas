@@ -2,7 +2,8 @@
 
 **Sprint Actif:** #1  
 **Date début:** 2026-02-16 08:45  
-**Durée:** 2-3 jours (variable selon avancement)  
+**Durée:** 2h max  
+**Fin prévue:** 2026-02-16 10:45  
 **Status:** 🟡 EN COURS
 
 ---
