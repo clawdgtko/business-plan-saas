@@ -1,6 +1,7 @@
 // Stripe Routes - Express Checkout
 import { Hono } from 'hono'
 import { auth } from '../middleware/auth.js'
+import { trackEvent } from '../middleware/analytics.js'
 
 const app = new Hono()
 
@@ -79,9 +80,14 @@ app.post('/webhook', async (c) => {
   const event = JSON.parse(body)
   
   switch (event.type) {
-    case 'checkout.session.completed':
-      // Update subscription in DB
+    case 'checkout.session.completed': {
+      const session = event.data.object
+      await trackEvent(c, 'subscription_complete', 'conversion', {
+        customer_id: session.customer,
+        amount: session.amount_total
+      })
       break
+    }
     case 'invoice.paid':
       // Extend subscription period
       break

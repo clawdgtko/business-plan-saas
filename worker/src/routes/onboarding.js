@@ -2,6 +2,7 @@
 import { Hono } from 'hono'
 import { auth, optionalAuth } from '../middleware/auth.js'
 import { guestOnboardingSchema, onboardingSchema, validate } from '../validators/index.js'
+import { trackEvent } from '../middleware/analytics.js'
 
 const app = new Hono()
 
@@ -33,6 +34,9 @@ app.post('/', optionalAuth, async (c) => {
       SET name = ?, company = ?, goal = ?, onboarding_completed = TRUE, updated_at = datetime('now')
       WHERE id = ?
     `).bind(data.name, data.company, data.goal, user.userId).run()
+    
+    // Track onboarding completion
+    await trackEvent(c, 'onboarding_complete', 'conversion', { company: data.company })
   
     // Create default business plan from template
     const bpId = crypto.randomUUID()
@@ -60,6 +64,9 @@ app.post('/', optionalAuth, async (c) => {
       now,
       now
     ).run()
+    
+    // Track BP creation from onboarding
+    await trackEvent(c, 'bp_created', 'conversion', { source: 'onboarding' })
   
     return c.json({
       success: true,

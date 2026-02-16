@@ -11,10 +11,12 @@ import businessPlanRoutes from './routes/business-plan.js'
 import stripeRoutes from './routes/stripe.js'
 import exportRoutes from './routes/export.js'
 import onboardingRoutes from './routes/onboarding.js'
+import analyticsRoutes from './routes/analytics.js'
 
 // Import middleware
 import { auth } from './middleware/auth.js'
 import { featureFlags } from './middleware/features.js'
+import { analyticsMiddleware } from './middleware/analytics.js'
 
 const app = new Hono()
 
@@ -27,6 +29,7 @@ app.use('*', cors({
   credentials: true
 }))
 app.use('*', featureFlags)
+app.use('*', analyticsMiddleware())
 
 // Health check
 app.get('/', (c) => {
@@ -46,6 +49,7 @@ app.route('/api/business-plans', businessPlanRoutes)
 app.route('/api/stripe', stripeRoutes)
 app.route('/api/export', exportRoutes)
 app.route('/api/onboarding', onboardingRoutes)
+app.route('/api/analytics', analyticsRoutes)
 
 // 404 handler
 app.notFound((c) => {
