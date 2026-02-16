@@ -1,4 +1,4 @@
-name = "business-plan-worker"
+name = "apps-bpsaas"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
@@ -8,11 +8,20 @@ database_name = "business-plan-db-prod"
 database_id = "a46f68d5-0725-4f61-bb66-b7570af6a982"
 
 [vars]
-ENVIRONMENT = "development"
+ENVIRONMENT = "production"
+
+[env.staging]
+name = "apps-bpsaas-staging"
+vars = { ENVIRONMENT = "staging" }
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "business-plan-db-staging"
+database_id = "a46f68d5-0725-4f61-bb66-b7570af6a982"
 
 # Secrets à configurer avec wrangler secret put:
 # - STRIPE_SECRET_KEY
-# - STRIPE_PUBLISHABLE_KEY
+# - STRIPE_PUBLISHABLE_KEY  
 # - STRIPE_WEBHOOK_SECRET
 # - JWT_SECRET  (REQUIRED - générer avec: openssl rand -base64 32)
 # - RESEND_API_KEY
