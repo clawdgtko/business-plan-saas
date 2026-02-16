@@ -11,9 +11,13 @@ import businessPlanRoutes from './routes/business-plan.js'
 import stripeRoutes from './routes/stripe.js'
 import exportRoutes from './routes/export.js'
 
+// Import middleware
+import { opentelemetry } from './middleware/opentelemetry.js'
+
 const app = new Hono()
 
 // Middleware
+app.use('*', opentelemetry())
 app.use('*', logger())
 app.use('*', cors({
   origin: ['http://localhost:5173', 'https://business-plan-saas.pages.dev'],
@@ -47,9 +51,24 @@ app.notFound((c) => {
 
 // Error handler
 app.onError((err, c) => {
-  console.error('Error:', err)
+  const correlationId = c.get('correlationId')
+  const spanContext = c.get('spanContext')
+  
+  console.log(JSON.stringify({
+    timestamp: new Date().toISOString(),
+    level: 'error',
+    correlationId,
+    traceId: spanContext?.traceId,
+    type: 'request.exception',
+    method: c.req.method,
+    path: c.req.path,
+    error: err.message,
+    stack: err.stack
+  }))
+  
   return c.json({ 
     error: 'Internal Server Error',
+    correlationId,
     message: c.env.ENVIRONMENT === 'development' ? err.message : undefined
   }, 500)
 })
