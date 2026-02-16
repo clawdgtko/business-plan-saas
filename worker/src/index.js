@@ -12,6 +12,7 @@ import stripeRoutes from './routes/stripe.js'
 import exportRoutes from './routes/export.js'
 import onboardingRoutes from './routes/onboarding.js'
 import analyticsRoutes from './routes/analytics.js'
+import adminRoutes from './routes/admin.js'
 
 // Import middleware
 import { auth } from './middleware/auth.js'
@@ -50,6 +51,7 @@ app.route('/api/stripe', stripeRoutes)
 app.route('/api/export', exportRoutes)
 app.route('/api/onboarding', onboardingRoutes)
 app.route('/api/analytics', analyticsRoutes)
+app.route('/api/admin', adminRoutes)
 
 // 404 handler
 app.notFound((c) => {

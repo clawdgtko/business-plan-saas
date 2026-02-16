@@ -14,6 +14,17 @@ export const useAuthStore = defineStore('auth', () => {
   // Getters
   const isAuthenticated = computed(() => !!token.value)
   
+  // Admin emails - should match worker ADMIN_EMAILS env var
+  const ADMIN_EMAILS = [
+    'admin@example.com',
+    'gtome@example.com'
+  ]
+  
+  const isAdmin = computed(() => {
+    if (!user.value?.email) return false
+    return ADMIN_EMAILS.includes(user.value.email.toLowerCase())
+  })
+  
   // Actions
   async function requestMagicLink(email) {
     loading.value = true
@@ -172,6 +183,7 @@ export const useAuthStore = defineStore('auth', () => {
     error,
     devLink,
     isAuthenticated,
+    isAdmin,
     onboardingCompleted,
     requestMagicLink,
     verifyToken,

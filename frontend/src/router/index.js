@@ -6,6 +6,7 @@ import Dashboard from '../views/Dashboard.vue'
 import Funnel from '../views/Funnel.vue'
 import Onboarding from '../views/Onboarding.vue'
 import CheckoutLogin from '../views/CheckoutLogin.vue'
+import Admin from '../views/Admin.vue'
 import { useAuthStore } from '../stores/auth.js'
 
 const routes = [
@@ -26,6 +27,12 @@ const routes = [
     component: Funnel
     // No requiresAuth - guests can access funnel
   },
+  { 
+    path: '/admin', 
+    name: 'Admin', 
+    component: Admin,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
 ]
 
 const router = createRouter({
@@ -42,9 +49,16 @@ router.beforeEach((to, from, next) => {
     // Save intended destination for redirect after login
     localStorage.setItem('bp_redirect_after_login', to.fullPath)
     next('/login')
-  } else {
-    next()
+    return
   }
+  
+  // Admin routes require admin access
+  if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    next('/dashboard')
+    return
+  }
+  
+  next()
 })
 
 export default router
