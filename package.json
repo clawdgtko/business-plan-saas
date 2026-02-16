@@ -1,0 +1,20 @@
+{
+  "name": "business-plan-saas",
+  "version": "1.0.0",
+  "description": "SaaS Business Plan Builder - 1M€ MRR Target",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:worker\" \"npm run dev:frontend\"",
+    "dev:worker": "cd worker && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "deploy": "cd worker && npm run deploy",
+    "build": "cd frontend && npm run build",
+    "db:migrate": "cd worker && npm run db:migrate"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "worker",
+    "frontend"
+  ]
+}
