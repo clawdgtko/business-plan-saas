@@ -2,7 +2,7 @@
 import { Hono } from 'hono'
 import { auth } from '../middleware/auth.js'
 import { validateBody } from '../middleware/validation.js'
-import { createBusinessPlanSchema } from '../validators/index.js'
+import { createBusinessPlanSchema, updateSectionSchema } from '../validators/index.js'
 
 const app = new Hono()
 
@@ -78,11 +78,11 @@ app.get('/:id', async (c) => {
 })
 
 // Update business plan section
-app.put('/:id/:section', async (c) => {
+app.put('/:id/:section', validateBody(updateSectionSchema), async (c) => {
   const { DB } = c.env
   const user = c.get('user')
   const { id, section } = c.req.params
-  const data = await c.req.json()
+  const data = c.get('validatedData')
   
   // Get existing plan
   const plan = await DB.prepare(
