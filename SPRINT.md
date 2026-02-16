@@ -1,79 +1,91 @@
 # 🎯 SPRINT SYSTEM - Business Plan SaaS
 
-**Sprint Actif:** #2  
-**Date début:** 2026-02-16 09:30  
+**Sprint Actif:** #2 ⭐ NOUVEAU  
+**Date début:** 2026-02-16 09:45  
 **Durée:** 2h max  
-**Fin prévue:** 2026-02-16 11:30  
-**Status:** 🟡 EN COURS
+**Fin prévue:** 2026-02-16 11:45  
+**Status:** 🟢 PRÊT À LANCER (en attente GO Grégoire)
 
 ---
 
-## 📋 Sprint #2 - Polish & Scale
+## 🎉 Sprint #1 - TERMINÉ ✅
+
+### Livrés:
+- ✅ Auth Magic Link
+- ✅ CRUD Business Plan
+- ✅ Stripe Checkout
+- ✅ CI/CD GitHub Actions
+- ✅ App déployée
+- ✅ Security & Rate limiting
+- ✅ Onboarding flow
+- ✅ Monitoring & Telemetry
+- ✅ Feature Flags
+
+### Reste (dette Sprint #2):
+- 🟡 Tests coverage > 80% (~30% actuel)
+- 🟡 Documentation API
+- 🟡 Persistence onboarding
+
+---
+
+## 🚀 Sprint #2 - DASHBOARD & SUBSCRIPTION
 
 ### Objectif
-Finaliser le MVP avec tests, documentation et intégration complète.
+**MVP COMPLET:** Dashboard utilisateur + Subscription 39,80€/mois
 
-### Livrables attendus
-- [ ] Tests coverage > 80%
-- [ ] Documentation API (Swagger/OpenAPI)
-- [ ] Persistence onboarding (backend)
-- [ ] Intégration frontend-backend onboarding
-- [ ] Déploiement production
-- [ ] README complet
-
----
-
-## 👥 Rôles & Responsabilités
-
-### @ProductManager (PM)
-**Rapport:** Toutes les heures + fin de sprint  
-**Responsabilités:**
-- Valider la qualité du MVP
-- Prioriser les bugs vs features
-- Reporter à Grégoire
-
-### @LeadDev (Lead)
-**Rapport:** Toutes les heures + fin de sprint  
-**Responsabilités:**
-- Review qualité code
-- Validation tests coverage
-- Architecture finale
+### Livrables attendus:
+- [ ] Tests coverage ≥ 80%
+- [ ] Documentation API complète
+- [ ] Persistence onboarding backend
+- [ ] Dashboard utilisateur (US-006)
+- [ ] Subscription flow (US-007)
+- [ ] Emails transactionnels
 
 ---
 
-## 📊 Tableau de Bord Sprint
+## 📋 Planning Sprint #2 (2h)
 
-| Agent | Tâche | Status | PR |
-|-------|-------|--------|-----|
-| @BackendAgent | Tests API + Persistence onboarding | 🟡 À démarrer | - |
-| @FrontendAgent | Intégration onboarding + Tests E2E | 🟡 À démarrer | - |
-| @DevOpsAgent | Déploiement prod + Monitoring | 🟡 À démarrer | - |
-| @QAEngineer | Tests coverage + Documentation | 🟡 À démarrer | - |
-
----
-
-## ✅ Checklist Fin de Sprint
-
-### PM doit valider :
-- [ ] MVP fonctionnel end-to-end
-- [ ] Tests pass > 80% coverage
-- [ ] Documentation complète
-- [ ] Déployé en production
-
-### Lead doit valider :
-- [ ] Code review final
-- [ ] Pas de dette critique
-- [ ] Architecture scalable
+| Heure | Action | Status |
+|-------|--------|--------|
+| 09:45 | Kickoff Sprint #2 | 🟡 En attente GO |
+| 09:50 | Création branches | - |
+| 10:00 | Check-in #1 | - |
+| 10:30 | Check-in #2 | - |
+| 11:00 | Check-in #3 | - |
+| 11:30 | Final review | - |
+| 11:45 | Sprint Review | - |
 
 ---
 
-## 🚨 Règles
+## 👥 Équipe Sprint #2
 
-1. **Sprint de 2h max**
-2. **Focus sur la qualité pas la quantité**
-3. **MVP doit être utilisable par un vrai utilisateur**
+| Agent | Tâche | Issue |
+|-------|-------|-------|
+| @BackendAgent | Doc API + Persistence + Subscription | #81, #82, #84 |
+| @FrontendAgent | Dashboard + Subscription UI | #83, #85 |
+| @QAEngineer | Tests coverage 80% | #80 |
+| @DevOpsAgent | Emails + Analytics | #86, #89 |
+| @UXDesigner | Copywriting | #88 |
 
 ---
 
-*Démarré: 2026-02-16 09:30*  
-*Prochain rapport: 10:30*
+## 📁 Documents
+
+- **Planning complet:** `SPRINT_2.md`
+- **Proposition à valider:** `docs/PROPOSITION_SPRINT_2.md`
+- **PR:** `feature/sprint-2-planning` → `main`
+
+---
+
+## ✅ Checklist Lancement
+
+- [ ] Validation Grégoire du scope
+- [ ] Validation LeadDev des priorités
+- [ ] Merge PR planning
+- [ ] Création issues GitHub
+- [ ] Kickoff équipe
+
+---
+
+*En attente GO Grégoire pour lancement Sprint #2*  
+*Dernière mise à jour: 2026-02-16 09:45*
