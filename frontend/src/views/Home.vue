@@ -1,86 +1,188 @@
 <template>
-  <div class="min-h-screen">
-    <!-- Navbar -->
-    <nav class="bg-white border-b">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <h1 class="text-xl font-bold text-primary-600">Business Plan SaaS</h1>
+  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+    <!-- Background Effects -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-purple-500/20 blur-[150px]"></div>
+      <div class="absolute top-1/2 -right-40 h-96 w-96 rounded-full bg-fuchsia-500/15 blur-[150px]"></div>
+      <div class="absolute -bottom-40 left-1/3 h-96 w-96 rounded-full bg-blue-500/15 blur-[150px]"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative z-10 border-b border-white/10 backdrop-blur-lg">
+      <div class="mx-auto max-w-7xl px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-600">
+              <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <span class="text-xl font-bold">Business Plan SaaS</span>
           </div>
-          <div class="flex items-center space-x-4">
-            <router-link to="/login" class="text-gray-600 hover:text-gray-900">
+          <div class="flex items-center gap-4">
+            <router-link to="/login" class="text-sm text-white/70 hover:text-white transition">
               Connexion
             </router-link>
-            <router-link 
-              to="/funnel" 
-              class="bg-primary-600 text-white px-4 py-2 rounded-lg hover:bg-primary-700"
-            >
-              Commencer
+            <router-link to="/login" class="rounded-lg bg-gradient-to-r from-purple-500 to-fuchsia-600 px-5 py-2.5 text-sm font-medium hover:opacity-90 transition">
+              Commencer gratuitement
             </router-link>
           </div>
         </div>
       </div>
     </nav>
 
-    <!-- Hero -->
-    <main>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div class="text-center">
-          <h2 class="text-4xl font-bold text-gray-900 sm:text-5xl">
-            Créez votre business plan
-            <span class="text-primary-600">en minutes</span>
-          </h2>
-          <p class="mt-4 text-xl text-gray-600 max-w-2xl mx-auto">
-            Un outil simple et puissant pour créer des business plans professionnels 
-            et obtenir un export PDF en quelques clics.
-          </p>
-          <div class="mt-8 flex justify-center gap-4">
-            <router-link 
-              to="/funnel" 
-              class="bg-primary-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-primary-700"
-            >
-              Essai gratuit
-            </router-link>
-            <a href="#features" class="text-gray-600 px-8 py-3 text-lg hover:text-gray-900">
-              En savoir plus
-            </a>
-          </div>
+    <!-- Hero Section -->
+    <section class="relative z-10 pt-20 pb-32">
+      <div class="mx-auto max-w-7xl px-6 text-center">
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-purple-300 mb-8">
+          <span class="flex h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
+          Nouveau : Génération IA assistée
+        </div>
+        
+        <h1 class="mx-auto max-w-4xl text-5xl font-bold leading-tight sm:text-6xl lg:text-7xl">
+          Créez votre <span class="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">business plan</span> en minutes, pas en semaines
+        </h1>
+        
+        <p class="mx-auto mt-6 max-w-2xl text-lg text-white/60">
+          Notre IA analyse votre marché, génère vos projections financières et rédige un business plan professionnel prêt à présenter aux investisseurs.
+        </p>
+        
+        <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <router-link to="/login" class="w-full sm:w-auto rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 px-8 py-4 text-lg font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/25">
+            Essayer gratuitement
+          </router-link>
+          <a href="#features" class="w-full sm:w-auto rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-lg font-medium hover:bg-white/10 transition">
+            Voir les fonctionnalités
+          </a>
         </div>
 
-        <!-- Features -->
-        <div id="features" class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="bg-white p-6 rounded-xl shadow-sm">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 text-xl font-bold">
-              1
-            </div>
-            <h3 class="mt-4 text-lg font-semibold">Funnel guidé</h3>
-            <p class="mt-2 text-gray-600">
-              Suivez nos étapes pour compléter chaque section de votre business plan.
-            </p>
+        <!-- Social Proof -->
+        <div class="mt-12 flex items-center justify-center gap-8 text-white/40">
+          <div class="flex -space-x-3">
+            <div class="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 border-2 border-slate-900"></div>
+            <div class="h-10 w-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 border-2 border-slate-900"></div>
+            <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-slate-900"></div>
+            <div class="h-10 w-10 rounded-full bg-gradient-to-br from-pink-400 to-pink-600 border-2 border-slate-900"></div>
           </div>
-          <div class="bg-white p-6 rounded-xl shadow-sm">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 text-xl font-bold">
-              2
+          <p class="text-sm">Rejoint par <strong class="text-white">500+</strong> entrepreneurs</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="relative z-10 border-t border-white/10 bg-white/5 py-24">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold sm:text-4xl">Tout ce qu'il faut pour convaincre</h2>
+          <p class="mt-4 text-white/60">Un business plan complet, de l'analyse de marché aux projections financières</p>
+        </div>
+
+        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Feature 1 -->
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-8 hover:bg-white/10 transition">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-fuchsia-600">
+              <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              </svg>
             </div>
-            <h3 class="mt-4 text-lg font-semibold">Édition simple</h3>
-            <p class="mt-2 text-gray-600">
-              Interface intuitive pour modifier votre business plan à tout moment.
-            </p>
+            <h3 class="text-xl font-semibold">Génération IA rapide</h3>
+            <p class="mt-2 text-white/60">Rédaction automatique basée sur votre secteur et votre modèle économique.</p>
           </div>
-          <div class="bg-white p-6 rounded-xl shadow-sm">
-            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 text-xl font-bold">
-              3
+
+          <!-- Feature 2 -->
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-8 hover:bg-white/10 transition">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600">
+              <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+              </svg>
             </div>
-            <h3 class="mt-4 text-lg font-semibold">Export PDF</h3>
-            <p class="mt-2 text-gray-600">
-              Téléchargez votre business plan en PDF professionnel en un clic.
-            </p>
+            <h3 class="text-xl font-semibold">Projections financières</h3>
+            <p class="mt-2 text-white/60">Tableaux de bord et prévisions sur 3 ans générés automatiquement.</p>
+          </div>
+
+          <!-- Feature 3 -->
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-8 hover:bg-white/10 transition">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-emerald-600">
+              <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold">Analyse de marché</h3>
+            <p class="mt-2 text-white/60">Données sectorielles et études de marché intégrées.</p>
+          </div>
+
+          <!-- Feature 4 -->
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-8 hover:bg-white/10 transition">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-red-600">
+              <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold">Export PDF professionnel</h3>
+            <p class="mt-2 text-white/60">Téléchargez votre business plan formaté prêt à présenter.</p>
+          </div>
+
+          <!-- Feature 5 -->
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-8 hover:bg-white/10 transition">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 to-rose-600">
+              <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold">Multi-utilisateurs</h3>
+            <p class="mt-2 text-white/60">Collaborez avec votre équipe en temps réel.</p>
+          </div>
+
+          <!-- Feature 6 -->
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-8 hover:bg-white/10 transition">
+            <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600">
+              <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold">Conseils personnalisés</h3>
+            <p class="mt-2 text-white/60">Recommandations IA pour améliorer votre stratégie.</p>
           </div>
         </div>
       </div>
-    </main>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="relative z-10 py-24">
+      <div class="mx-auto max-w-4xl px-6 text-center">
+        <h2 class="text-3xl font-bold sm:text-4xl">Prêt à démarrer ?</h2>
+        <p class="mt-4 text-lg text-white/60">Rejoignez les entrepreneurs qui gagnent du temps et des investissements.</p>
+        <div class="mt-10">
+          <router-link to="/login" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 px-8 py-4 text-lg font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/25">
+            Créer mon business plan
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </router-link>
+        </div>
+        <p class="mt-4 text-sm text-white/40">Gratuit • Sans carte bancaire • Annulation à tout moment</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="relative z-10 border-t border-white/10 py-12">
+      <div class="mx-auto max-w-7xl px-6">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-fuchsia-600">
+              <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <span class="font-semibold">Business Plan SaaS</span>
+          </div>
+          <p class="text-sm text-white/40">© 2026 Business Plan SaaS. Tous droits réservés.</p>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
 <script setup>
+// Landing page - No specific logic needed
 </script>
