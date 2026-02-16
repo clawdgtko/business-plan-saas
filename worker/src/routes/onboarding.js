@@ -34,7 +34,7 @@ app.post('/', optionalAuth, async (c) => {
       SET name = ?, company = ?, goal = ?, onboarding_completed = TRUE, updated_at = datetime('now')
       WHERE id = ?
     `).bind(data.name, data.company, data.goal, user.userId).run()
-  
+    
     // Track onboarding completion
     await trackEvent(c, 'onboarding_complete', 'conversion', {
       company: data.company,

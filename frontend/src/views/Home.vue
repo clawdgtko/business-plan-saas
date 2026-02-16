@@ -23,7 +23,7 @@
             <router-link to="/login" class="text-sm text-white/70 hover:text-white transition">
               Connexion
             </router-link>
-            <router-link to="/login" class="rounded-lg bg-gradient-to-r from-purple-500 to-fuchsia-600 px-5 py-2.5 text-sm font-medium hover:opacity-90 transition">
+            <router-link to="/funnel" class="rounded-lg bg-gradient-to-r from-purple-500 to-fuchsia-600 px-5 py-2.5 text-sm font-medium hover:opacity-90 transition">
               Commencer gratuitement
             </router-link>
           </div>
@@ -48,7 +48,7 @@
         </p>
         
         <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <router-link to="/login" class="w-full sm:w-auto rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 px-8 py-4 text-lg font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/25">
+          <router-link to="/funnel" class="w-full sm:w-auto rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 px-8 py-4 text-lg font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/25">
             Essayer gratuitement
           </router-link>
           <a href="#features" class="w-full sm:w-auto rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-lg font-medium hover:bg-white/10 transition">
@@ -153,7 +153,7 @@
         <h2 class="text-3xl font-bold sm:text-4xl">Prêt à démarrer ?</h2>
         <p class="mt-4 text-lg text-white/60">Rejoignez les entrepreneurs qui gagnent du temps et des investissements.</p>
         <div class="mt-10">
-          <router-link to="/login" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 px-8 py-4 text-lg font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/25">
+          <router-link to="/funnel" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 px-8 py-4 text-lg font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/25">
             Créer mon business plan
             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>

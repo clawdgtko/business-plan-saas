@@ -19,21 +19,11 @@ export async function up(db) {
   `)
 
   // Create indexes for common queries
-  await db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_events_type ON analytics_events(event_type);
-  `)
-  await db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_events_category ON analytics_events(event_category);
-  `)
-  await db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_events_user ON analytics_events(user_id);
-  `)
-  await db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_events_timestamp ON analytics_events(timestamp);
-  `)
-  await db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_events_funnel ON analytics_events(event_category, event_type, timestamp);
-  `)
+  await db.exec(`CREATE INDEX IF NOT EXISTS idx_events_type ON analytics_events(event_type);`)
+  await db.exec(`CREATE INDEX IF NOT EXISTS idx_events_category ON analytics_events(event_category);`)
+  await db.exec(`CREATE INDEX IF NOT EXISTS idx_events_user ON analytics_events(user_id);`)
+  await db.exec(`CREATE INDEX IF NOT EXISTS idx_events_timestamp ON analytics_events(timestamp);`)
+  await db.exec(`CREATE INDEX IF NOT EXISTS idx_events_funnel ON analytics_events(event_category, event_type, timestamp);`)
 
   // Create funnel summary table (aggregated data for fast queries)
   await db.exec(`
@@ -49,10 +39,7 @@ export async function up(db) {
       UNIQUE(date, step)
     );
   `)
-
-  await db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_funnel_date ON funnel_summary(date);
-  `)
+  await db.exec(`CREATE INDEX IF NOT EXISTS idx_funnel_date ON funnel_summary(date);`)
 }
 
 export async function down(db) {

@@ -89,11 +89,6 @@ export function analyticsMiddleware() {
       if (path === '/api/stripe/checkout' && method === 'POST') {
         await trackEvent(c, 'checkout_started', 'conversion', { duration })
       }
-      
-      // Subscription created (webhook will track this too)
-      if (path === '/api/stripe/webhook' && method === 'POST') {
-        // Webhook handles this separately
-      }
     }
   }
 }
