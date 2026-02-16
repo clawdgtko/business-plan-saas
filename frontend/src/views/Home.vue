@@ -23,8 +23,13 @@
             <router-link to="/login" class="text-sm text-white/70 hover:text-white transition">
               Connexion
             </router-link>
-            <router-link to="/funnel" class="rounded-lg bg-gradient-to-r from-purple-500 to-fuchsia-600 px-5 py-2.5 text-sm font-medium hover:opacity-90 transition">
-              Commencer gratuitement
+            <router-link to="/funnel" class="group relative rounded-lg bg-gradient-to-r from-amber-400 via-orange-500 to-fuchsia-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-orange-500/20 transition-all duration-300 overflow-hidden hover:shadow-orange-500/30 hover:-translate-y-0.5">
+              <span class="relative flex items-center gap-1.5">
+                Commencer
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </span>
             </router-link>
           </div>
         </div>
@@ -34,25 +39,32 @@
     <!-- Hero Section -->
     <section class="relative z-10 pt-20 pb-32">
       <div class="mx-auto max-w-7xl px-6 text-center">
-        <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-purple-300 mb-8">
-          <span class="flex h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
-          Nouveau : Génération IA assistée
+        <div class="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-4 py-2 text-sm text-amber-300 mb-8">
+          <span class="flex h-2 w-2 rounded-full bg-amber-400 animate-pulse"></span>
+          🔥 Offre de lancement : -50% sur l'abonnement annuel
         </div>
-        
+
         <h1 class="mx-auto max-w-4xl text-5xl font-bold leading-tight sm:text-6xl lg:text-7xl">
-          Créez votre <span class="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-400 bg-clip-text text-transparent">business plan</span> en minutes, pas en semaines
+          Votre business plan professionnel <span class="bg-gradient-to-r from-amber-400 via-orange-400 to-fuchsia-400 bg-clip-text text-transparent">en 5 minutes</span>, pas en 5 jours
         </h1>
-        
+
         <p class="mx-auto mt-6 max-w-2xl text-lg text-white/60">
-          Notre IA analyse votre marché, génère vos projections financières et rédige un business plan professionnel prêt à présenter aux investisseurs.
+          Propulsé par IA. Conçu par des experts. Approuvé par les banques. Obtenez un PDF prêt à présenter en quelques clics.
         </p>
         
         <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <router-link to="/funnel" class="w-full sm:w-auto rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 px-8 py-4 text-lg font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/25">
-            Essayer gratuitement
+          <router-link to="/funnel" class="group relative w-full sm:w-auto rounded-xl bg-gradient-to-r from-amber-400 via-orange-500 to-fuchsia-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-orange-500/30 transition-all duration-300 overflow-hidden hover:shadow-2xl hover:shadow-orange-500/40 hover:-translate-y-1">
+            <!-- Shimmer effect -->
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            <span class="relative flex items-center justify-center gap-2">
+              🚀 Créer mon business plan
+              <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </span>
           </router-link>
-          <a href="#features" class="w-full sm:w-auto rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-lg font-medium hover:bg-white/10 transition">
-            Voir les fonctionnalités
+          <a href="#features" class="w-full sm:w-auto rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-lg font-medium hover:bg-white/10 hover:border-white/30 transition-all duration-300">
+            Voir comment ça marche
           </a>
         </div>
 
@@ -150,17 +162,48 @@
     <!-- CTA Section -->
     <section class="relative z-10 py-24">
       <div class="mx-auto max-w-4xl px-6 text-center">
-        <h2 class="text-3xl font-bold sm:text-4xl">Prêt à démarrer ?</h2>
-        <p class="mt-4 text-lg text-white/60">Rejoignez les entrepreneurs qui gagnent du temps et des investissements.</p>
+        <div class="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-4 py-2 text-sm text-emerald-300 mb-6">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Plus de 500 entrepreneurs ont déjà créé leur plan
+        </div>
+        <h2 class="text-3xl font-bold sm:text-4xl">Prêt à convaincre les investisseurs ?</h2>
+        <p class="mt-4 text-lg text-white/60">En 5 minutes, obtenez un business plan professionnel qui fait la différence.</p>
         <div class="mt-10">
-          <router-link to="/funnel" class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-500 to-fuchsia-600 px-8 py-4 text-lg font-semibold hover:opacity-90 transition shadow-lg shadow-purple-500/25">
-            Créer mon business plan
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-            </svg>
+          <router-link to="/funnel" class="group relative inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 via-orange-500 to-fuchsia-500 px-10 py-5 text-lg font-bold text-white shadow-xl shadow-orange-500/30 transition-all duration-300 overflow-hidden hover:shadow-2xl hover:shadow-orange-500/40 hover:-translate-y-1">
+            <!-- Shimmer effect -->
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            <span class="relative flex items-center gap-2">
+              Commencer maintenant — 2,90€
+              <svg class="h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+              </svg>
+            </span>
           </router-link>
         </div>
-        <p class="mt-4 text-sm text-white/40">Gratuit • Sans carte bancaire • Annulation à tout moment</p>
+        <div class="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-white/40">
+          <span class="flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Généré en 2 min
+          </span>
+          <span>•</span>
+          <span class="flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Garantie 30 jours
+          </span>
+          <span>•</span>
+          <span class="flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            Sans engagement
+          </span>
+        </div>
       </div>
     </section>
 

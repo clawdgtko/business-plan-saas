@@ -406,45 +406,101 @@
           <!-- Step: Review -->
           <div v-else-if="currentStep.id === 'review'" key="review" class="space-y-6">
             <div class="text-center mb-8">
-              <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400/20 to-emerald-500/20 mb-4">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400/20 to-emerald-500/20 mb-4 ring-1 ring-green-400/30 animate-bounce-in">
                 <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h2 class="text-2xl font-bold text-white">Récapitulatif</h2>
-              <p class="text-white/60 mt-2">Vérifiez vos informations avant de continuer</p>
+              <h2 class="text-2xl font-bold text-white">Votre business plan est prêt ! 🎉</h2>
+              <p class="text-white/60 mt-2">Voici un aperçu de ce que nous allons générer pour vous</p>
             </div>
             
             <div class="space-y-4">
-              <div class="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
-                <div class="flex justify-between items-center pb-3 border-b border-white/10">
-                  <span class="text-white/60">Entreprise</span>
-                  <span class="text-white font-medium">{{ formData.businessName || '-' }}</span>
-                </div>
-                <div class="flex justify-between items-center pb-3 border-b border-white/10">
-                  <span class="text-white/60">Secteur</span>
-                  <span class="text-white font-medium">{{ getSectorLabel(formData.sector) || '-' }}</span>
-                </div>
-                <div class="flex justify-between items-center pb-3 border-b border-white/10">
-                  <span class="text-white/60">Marché</span>
-                  <span class="text-white font-medium">{{ formData.marketSize || '-' }}</span>
-                </div>
-                <div class="flex justify-between items-center">
-                  <span class="text-white/60">Financement</span>
-                  <span class="text-white font-medium">{{ formData.fundingNeeded ? `€${formData.fundingNeeded}` : '-' }}</span>
+              <!-- Summary Card -->
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-5 space-y-4">
+                <h3 class="text-sm font-semibold text-white/80 uppercase tracking-wider flex items-center gap-2">
+                  <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Récapitulatif de votre projet
+                </h3>
+                
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center py-2 border-b border-white/5">
+                    <span class="text-white/50 text-sm">Entreprise</span>
+                    <span class="text-white font-medium">{{ formData.businessName || '-' }}</span>
+                  </div>
+                  <div class="flex justify-between items-center py-2 border-b border-white/5">
+                    <span class="text-white/50 text-sm">Secteur</span>
+                    <span class="text-white font-medium flex items-center gap-2">
+                      <span v-if="formData.sector">{{ getSectorIcon(formData.sector) }}</span>
+                      {{ getSectorLabel(formData.sector) || '-' }}
+                    </span>
+                  </div>
+                  <div class="flex justify-between items-center py-2 border-b border-white/5">
+                    <span class="text-white/50 text-sm">Marché estimé</span>
+                    <span class="text-white font-medium">{{ formData.marketSize || 'À définir' }}</span>
+                  </div>
+                  <div class="flex justify-between items-center py-2">
+                    <span class="text-white/50 text-sm">Besoin de financement</span>
+                    <span class="text-emerald-400 font-semibold">
+                      {{ formData.fundingNeeded ? `€${formatNumber(formData.fundingNeeded)}` : '-' }}
+                    </span>
+                  </div>
                 </div>
               </div>
               
-              <div class="rounded-xl border border-amber-400/30 bg-amber-400/10 p-4">
-                <div class="flex items-start gap-3">
-                  <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              <!-- What's included -->
+              <div class="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] p-5">
+                <h3 class="text-sm font-semibold text-white/80 uppercase tracking-wider mb-4 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
                   </svg>
-                  <div>
-                    <p class="text-amber-300 font-medium">Presque terminé !</p>
+                  Ce que vous allez recevoir
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div v-for="(item, idx) in includedItems" :key="idx" class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400/20 to-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span class="text-sm text-white/80">{{ item }}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- CTA Preview Card -->
+              <div class="rounded-2xl border border-amber-400/30 bg-gradient-to-br from-amber-400/10 to-orange-500/10 p-5 relative overflow-hidden">
+                <!-- Background glow -->
+                <div class="absolute -top-20 -right-20 w-40 h-40 bg-amber-400/20 rounded-full blur-3xl"></div>
+                
+                <div class="relative flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-orange-500/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-amber-300 font-bold text-lg">Débloquez votre business plan maintenant</p>
                     <p class="text-amber-200/70 text-sm mt-1">
-                      Passez à l'abonnement pour générer votre PDF professionnel et accéder à toutes les fonctionnalités.
+                      Accès immédiat à votre PDF professionnel prêt pour les banques et investisseurs.
                     </p>
+                    <div class="flex items-center gap-4 mt-3 text-xs text-amber-300/60">
+                      <span class="flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Généré en 2 min
+                      </span>
+                      <span class="flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                        Garantie 30 jours
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -455,43 +511,79 @@
     </main>
 
     <!-- Sticky Navigation Footer -->
-    <footer class="fixed bottom-0 left-0 right-0 bg-white/5 backdrop-blur-lg border-t border-white/10">
+    <footer class="fixed bottom-0 left-0 right-0 bg-white/5 backdrop-blur-xl border-t border-white/10 z-40">
       <div class="max-w-4xl mx-auto px-4 py-4">
         <div class="flex justify-between items-center">
+          <!-- Previous Button -->
           <button 
             v-if="currentStepIndex > 0"
             @click="prevStep"
-            class="flex items-center gap-2 px-4 py-2 text-white/60 hover:text-white transition-colors"
+            class="group flex items-center gap-2 px-4 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
-            Précédent
+            <span class="hidden sm:inline">Retour</span>
           </button>
-          <div v-else />
+          <div v-else class="w-20" />
           
+          <!-- Next Button -->
           <button 
             v-if="currentStepIndex < steps.length - 1"
             @click="nextStep"
             :disabled="!isCurrentStepValid"
-            class="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 via-orange-500 to-fuchsia-500 text-white font-semibold shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:translate-y-[-1px]"
+            class="group relative flex items-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-white shadow-lg transition-all duration-300 overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none hover:shadow-xl hover:-translate-y-0.5"
+            :class="isCurrentStepValid ? 'shadow-orange-500/30 hover:shadow-orange-500/50' : ''"
           >
-            Suivant
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Button gradient background -->
+            <div class="absolute inset-0 bg-gradient-to-r from-amber-400 via-orange-500 to-fuchsia-500 transition-opacity duration-300" 
+                 :class="isCurrentStepValid ? 'opacity-100' : 'opacity-60'"></div>
+            <!-- Hover glow effect -->
+            <div v-if="isCurrentStepValid" class="absolute inset-0 bg-gradient-to-r from-amber-300 via-orange-400 to-fuchsia-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            <span class="relative">Continuer</span>
+            <svg class="w-4 h-4 relative transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
           </button>
           
+          <!-- CTA Button (Final Step) -->
           <button 
             v-else
             @click="goToCheckout"
-            class="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all hover:translate-y-[-1px]"
+            class="group relative flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/40 hover:-translate-y-0.5 animate-pulse-glow"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- Button gradient background -->
+            <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500"></div>
+            <!-- Shimmer effect -->
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+            <!-- Pulse ring -->
+            <div class="absolute inset-0 rounded-xl ring-2 ring-emerald-400/50 animate-ping opacity-0 group-hover:opacity-30"></div>
+            
+            <svg class="w-5 h-5 relative" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
-            Débloquer mon plan
+            <span class="relative">Débloquer mon plan — 2,90€</span>
+            <svg class="w-4 h-4 relative transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
           </button>
+        </div>
+        
+        <!-- Trust badges -->
+        <div class="flex justify-center items-center gap-4 mt-3 text-[10px] text-white/40">
+          <span class="flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Paiement sécurisé
+          </span>
+          <span class="flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            30 jours garantie
+          </span>
         </div>
       </div>
     </footer>
@@ -535,12 +627,14 @@ const saveStatus = ref('idle')
 const lastSaved = ref(null)
 const saveTimeout = ref(null)
 const validationErrors = reactive({})
+const touchedFields = reactive({})
 
 const formData = reactive({
   businessName: '',
   description: '',
   sector: '',
   marketSize: '',
+  targetCustomers: '',
   competitors: '',
   revenueYear1: '',
   revenueYear2: '',
@@ -549,6 +643,16 @@ const formData = reactive({
 })
 
 const competitorsList = ref([''])
+
+// Included items for review step
+const includedItems = [
+  'PDF professionnel complet',
+  'Analyse de marché détaillée',
+  'Projections financières sur 3 ans',
+  'Modèle Excel téléchargeable',
+  'Éditions illimitées',
+  'Support email prioritaire'
+]
 
 const currentStep = computed(() => steps[currentStepIndex.value])
 
@@ -568,7 +672,8 @@ const isCurrentStepValid = computed(() => {
 // Methods
 function validateField(field) {
   validationErrors[field] = null
-  
+  touchedFields[field] = true
+
   switch (field) {
     case 'businessName':
       if (!formData.businessName.trim()) {
@@ -585,6 +690,72 @@ function validateField(field) {
       }
       break
   }
+}
+
+function onFieldInput(field) {
+  // Clear error when user starts typing
+  if (touchedFields[field] && validationErrors[field]) {
+    validateField(field)
+  }
+}
+
+function selectSector(value) {
+  formData.sector = value
+  // Trigger save after selection
+  debouncedSave()
+}
+
+function goToStep(index) {
+  if (index < currentStepIndex.value || canNavigateToStep(index)) {
+    transitionDirection.value = index > currentStepIndex.value ? 'forward' : 'backward'
+    saveProgress()
+    currentStepIndex.value = index
+  }
+}
+
+function canNavigateToStep(index) {
+  // Allow navigation to any previous step or next step if current is valid
+  if (index <= currentStepIndex.value) return true
+  // For steps beyond current, check if all previous required steps are valid
+  for (let i = 0; i < index; i++) {
+    if (!isStepValid(i)) return false
+  }
+  return true
+}
+
+function isStepValid(stepIndex) {
+  const step = steps[stepIndex]
+  switch (step.id) {
+    case 'business-info':
+      return !!(formData.businessName.trim() && formData.description.trim() && formData.sector)
+    default:
+      return true
+  }
+}
+
+function isStepCompleted(index) {
+  return index < currentStepIndex.value || (index === currentStepIndex.value && isStepValid(index))
+}
+
+function getStepIndicatorClass(index) {
+  if (index === currentStepIndex.value) {
+    return 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-lg shadow-orange-500/40 scale-110 ring-2 ring-white/20'
+  } else if (isStepCompleted(index)) {
+    return 'bg-emerald-500 text-white border-emerald-400'
+  } else if (canNavigateToStep(index)) {
+    return 'bg-white/10 text-white/60 border-white/20 hover:bg-white/20'
+  }
+  return 'bg-white/5 text-white/30 border-white/10'
+}
+
+function getSectorIcon(value) {
+  const sector = sectors.find(s => s.value === value)
+  return sector ? sector.icon : ''
+}
+
+function formatNumber(num) {
+  if (!num) return '0'
+  return new Intl.NumberFormat('fr-FR', { notation: 'compact', compactDisplay: 'short' }).format(num)
 }
 
 function addCompetitor() {
@@ -692,7 +863,7 @@ onMounted(async () => {
       competitorsList.value = comps.length > 0 ? comps : ['']
     }
   }
-  
+
   // Load from API if editing
   if (route.params.id) {
     try {
@@ -706,3 +877,128 @@ onMounted(async () => {
   }
 })
 </script>
+
+<style scoped>
+/* Shimmer animation for progress bar */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Bounce in animation */
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scale in animation */
+@keyframes scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Pulse glow animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 10px 40px -10px rgba(16, 185, 129, 0.3);
+  }
+  50% {
+    box-shadow: 0 10px 40px -5px rgba(16, 185, 129, 0.5);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Slow pulse for icons */
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Smooth transitions for group inputs */
+.group\/input:focus-within label {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Input autofill styling for dark theme */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus {
+  -webkit-text-fill-color: white;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(37, 37, 66, 0.8) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer,
+  .animate-bounce-in,
+  .animate-scale-in,
+  .animate-pulse-glow,
+  .animate-pulse-slow {
+    animation: none;
+  }
+}
+</style>
