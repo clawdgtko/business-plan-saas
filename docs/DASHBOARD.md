@@ -52,13 +52,26 @@
 
 ---
 
-## 🚨 Alertes
+## 🚨 Alertes & Reporting
 
 | Niveau | Description | Depuis | Action |
 |--------|-------------|--------|--------|
-| 🟡 Warning | Issues non assignées dans GitHub | - | Ajout labels agent |
+| 🟡 Warning | Issues non assignées dans GitHub | - | ✅ Labels ajoutés |
 | 🟢 OK | Aucun agent bloqué | - | Continue |
 | 🟢 OK | Commits récents | 30 min | Continue |
+| 🟡 **NEW** | Système reporting activé | 09:20 | Premier check à 09:30 |
+
+### 📊 Status Reports Agents
+
+| Agent | Dernier Report | Il y a | Prochain | Status |
+|-------|----------------|--------|----------|--------|
+| @BackendAgent | - | - | 09:45 | 🟡 Attendu |
+| @QAEngineer | - | - | 09:45 | 🟡 Attendu |
+| @DevOpsAgent | - | - | 09:45 | 🟡 Attendu |
+| @FrontendAgent | - | - | 09:45 | 🟡 Optionnel |
+| @UXDesigner | 09:15 | 5 min | - | 🟢 Reporté S2 |
+
+**Système:** [AGENT_REPORTING.md](AGENT_REPORTING.md)
 
 ---
 
