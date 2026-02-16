@@ -1,10 +1,110 @@
 import { Hono } from 'hono'
 import { sign, verify } from 'hono/jwt'
+import { getJwtSecret, requireJsonContentType, securityHeaders } from '../middleware/auth.js'
 
 const app = new Hono()
 
-// JWT Secret - récupéré des variables d'environnement Cloudflare
-const getJwtSecret = (c) => c.env.JWT_SECRET
+app.use('*', securityHeaders())
+
+const MAGIC_LINK_RATE_LIMIT = {
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5
+}
+
+const memoryRateLimitStore = new Map()
+
+function getClientIp(c) {
+  const cfIp = c.req.header('CF-Connecting-IP')
+  if (cfIp) {
+    return cfIp
+  }
+  const forwardedFor = c.req.header('X-Forwarded-For')
+  if (forwardedFor) {
+    return forwardedFor.split(',')[0].trim()
+  }
+  return 'unknown'
+}
+
+function getRateLimitCache() {
+  if (typeof caches === 'undefined' || !caches.default) {
+    return null
+  }
+  return caches.default
+}
+
+async function readRateLimitEntry(cache, key, now, windowMs) {
+  if (!cache) {
+    const entry = memoryRateLimitStore.get(key)
+    if (!entry || entry.resetAt <= now) {
+      return { count: 0, resetAt: now + windowMs }
+    }
+    return entry
+  }
+
+  const request = new Request(`https://rate-limit/${key}`)
+  const cached = await cache.match(request)
+  if (!cached) {
+    return { count: 0, resetAt: now + windowMs, request }
+  }
+
+  const data = await cached.json()
+  if (!data || typeof data.resetAt !== 'number' || data.resetAt <= now) {
+    return { count: 0, resetAt: now + windowMs, request }
+  }
+
+  return { count: data.count || 0, resetAt: data.resetAt, request }
+}
+
+async function writeRateLimitEntry(cache, key, entry, now) {
+  if (!cache) {
+    memoryRateLimitStore.set(key, entry)
+    return
+  }
+
+  const ttlSeconds = Math.max(1, Math.ceil((entry.resetAt - now) / 1000))
+  const request = entry.request || new Request(`https://rate-limit/${key}`)
+  await cache.put(
+    request,
+    new Response(JSON.stringify({ count: entry.count, resetAt: entry.resetAt }), {
+      headers: { 'Cache-Control': `max-age=${ttlSeconds}` }
+    })
+  )
+}
+
+async function checkRateLimit(c, { windowMs, max }) {
+  const key = `magic-link:${getClientIp(c)}`
+  const now = Date.now()
+  const cache = getRateLimitCache()
+  const entry = await readRateLimitEntry(cache, key, now, windowMs)
+
+  entry.count += 1
+  await writeRateLimitEntry(cache, key, entry, now)
+
+  const remaining = Math.max(0, max - entry.count)
+  const limited = entry.count > max
+  const retryAfter = Math.max(0, Math.ceil((entry.resetAt - now) / 1000))
+
+  return {
+    limited,
+    remaining,
+    limit: max,
+    resetAt: entry.resetAt,
+    retryAfter
+  }
+}
+
+function setRateLimitHeaders(c, rateLimit) {
+  c.header('X-RateLimit-Limit', String(rateLimit.limit))
+  c.header('X-RateLimit-Remaining', String(rateLimit.remaining))
+  c.header('X-RateLimit-Reset', String(Math.ceil(rateLimit.resetAt / 1000)))
+  if (rateLimit.limited) {
+    c.header('Retry-After', String(rateLimit.retryAfter))
+  }
+}
+
+export function resetRateLimitStore() {
+  memoryRateLimitStore.clear()
+}
 
 // Generate random token
 function generateToken() {
@@ -13,7 +113,25 @@ function generateToken() {
 
 // Request magic link
 app.post('/magic-link', async (c) => {
-  const { email } = await c.req.json()
+  const rateLimit = await checkRateLimit(c, MAGIC_LINK_RATE_LIMIT)
+  setRateLimitHeaders(c, rateLimit)
+  if (rateLimit.limited) {
+    return c.json({ error: 'Trop de requêtes' }, 429)
+  }
+
+  const contentTypeError = requireJsonContentType(c)
+  if (contentTypeError) {
+    return contentTypeError
+  }
+
+  let payload
+  try {
+    payload = await c.req.json()
+  } catch (e) {
+    return c.json({ error: 'JSON invalide' }, 400)
+  }
+
+  const { email } = payload
   
   if (!email || !email.includes('@')) {
     return c.json({ error: 'Email invalide' }, 400)
@@ -73,11 +191,16 @@ app.get('/verify/:token', async (c) => {
   }
   
   // Generate JWT
+  const jwtSecret = getJwtSecret(c)
+  if (!jwtSecret) {
+    return c.json({ error: 'JWT secret manquant' }, 500)
+  }
+
   const jwtToken = await sign({ 
     userId: user.id, 
     email: user.email,
     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7 // 7 days
-  }, getJwtSecret(c))
+  }, jwtSecret)
   
   return c.json({ 
     success: true, 
@@ -98,9 +221,13 @@ app.get('/me', async (c) => {
   }
   
   const token = authHeader.slice(7)
+  const jwtSecret = getJwtSecret(c)
+  if (!jwtSecret) {
+    return c.json({ error: 'JWT secret manquant' }, 500)
+  }
   
   try {
-    const payload = await verify(token, getJwtSecret(c))
+    const payload = await verify(token, jwtSecret)
     return c.json({
       user: {
         id: payload.userId,
