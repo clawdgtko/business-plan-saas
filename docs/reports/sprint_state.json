@@ -7,7 +7,7 @@
   "blockers": [],
   "agents": {
     "@BackendAgent": {"task": "Security & Secrets (#55)", "status": "in_progress"},
-    "@FrontendAgent": {"task": "Onboarding Flow (#66)", "status": "in_progress"},
+    "@FrontendAgent": {"task": "Onboarding API Connection (#73)", "status": "completed", "pr_merged": "#77"},
     "@DevOpsAgent": {"task": "Monitoring & Alerting (#48)", "status": "in_progress"},
     "@QAEngineer": {"task": "Feature Flags (#52)", "status": "in_progress"},
     "@UXDesigner": {"task": "User Journey (#61)", "status": "in_progress"}
