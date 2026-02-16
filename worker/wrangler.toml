@@ -2,17 +2,20 @@ name = "business-plan-worker"
 main = "src/index.js"
 compatibility_date = "2024-01-01"
 
+# Base configuration - override par environnement
+
 [[d1_databases]]
 binding = "DB"
-database_name = "business-plan-db"
+database_name = "business-plan-db-dev"
 database_id = "local"
 
 [vars]
 ENVIRONMENT = "development"
+API_URL = "http://localhost:8787"
+FRONTEND_URL = "http://localhost:5173"
 
-# Secrets à configurer avec wrangler secret put:
+# Secrets (à configurer avec: wrangler secret put NOM)
 # - STRIPE_SECRET_KEY
-# - STRIPE_PUBLISHABLE_KEY
-# - STRIPE_WEBHOOK_SECRET
+# - STRIPE_WEBHOOK_SECRET  
 # - JWT_SECRET
 # - RESEND_API_KEY

@@ -1,0 +1,23 @@
+name = "business-plan-staging"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "business-plan-db-staging"
+database_id = "REPLACE_WITH_STAGING_DB_ID"
+
+[vars]
+ENVIRONMENT = "staging"
+API_URL = "https://staging.business-plan.app"
+FRONTEND_URL = "https://staging.business-plan.app"
+
+# Secrets à configurer:
+# wrangler secret put STRIPE_SECRET_KEY --env staging
+# wrangler secret put STRIPE_WEBHOOK_SECRET --env staging
+# wrangler secret put JWT_SECRET --env staging
+# wrangler secret put RESEND_API_KEY --env staging
+
+[[env.staging.routes]]
+pattern = "staging.business-plan.app/*"
+custom_domain = true

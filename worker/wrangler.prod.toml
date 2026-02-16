@@ -1,0 +1,27 @@
+name = "business-plan"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "business-plan-db-prod"
+database_id = "REPLACE_WITH_PROD_DB_ID"
+
+[vars]
+ENVIRONMENT = "production"
+API_URL = "https://business-plan.app"
+FRONTEND_URL = "https://business-plan.app"
+
+# Secrets à configurer:
+# wrangler secret put STRIPE_SECRET_KEY --env production
+# wrangler secret put STRIPE_WEBHOOK_SECRET --env production
+# wrangler secret put JWT_SECRET --env production
+# wrangler secret put RESEND_API_KEY --env production
+
+[[env.production.routes]]
+pattern = "business-plan.app/*"
+custom_domain = true
+
+# Scaling settings for production
+[env.production.limits]
+cpu_ms = 30000
