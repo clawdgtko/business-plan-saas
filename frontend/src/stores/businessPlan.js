@@ -129,6 +129,11 @@ export const useBusinessPlanStore = defineStore('businessPlan', () => {
     }
   }
   
+  async function updateBusinessPlan(id, data) {
+    // Update all sections with the provided data
+    return updateSection(id, 'data', data)
+  }
+  
   async function deleteBusinessPlan(id) {
     try {
       const res = await fetch(`${API_URL}/api/business-plans/${id}`, {
@@ -162,6 +167,7 @@ export const useBusinessPlanStore = defineStore('businessPlan', () => {
     createBusinessPlan,
     fetchBusinessPlan,
     updateSection,
+    updateBusinessPlan,
     deleteBusinessPlan
   }
 })

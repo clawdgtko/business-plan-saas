@@ -2,6 +2,7 @@
 import { Hono } from 'hono'
 import { auth, optionalAuth } from '../middleware/auth.js'
 import { guestOnboardingSchema, onboardingSchema, validate } from '../validators/index.js'
+import { trackEvent } from '../middleware/analytics.js'
 
 const app = new Hono()
 
@@ -34,6 +35,12 @@ app.post('/', optionalAuth, async (c) => {
       WHERE id = ?
     `).bind(data.name, data.company, data.goal, user.userId).run()
   
+    // Track onboarding completion
+    await trackEvent(c, 'onboarding_complete', 'conversion', {
+      company: data.company,
+      has_email: !!user.email
+    })
+    
     // Create default business plan from template
     const bpId = crypto.randomUUID()
     const now = new Date().toISOString()
@@ -60,6 +67,12 @@ app.post('/', optionalAuth, async (c) => {
       now,
       now
     ).run()
+    
+    // Track business plan creation from onboarding
+    await trackEvent(c, 'bp_created', 'conversion', {
+      source: 'onboarding',
+      has_company_name: !!data.company
+    })
   
     return c.json({
       success: true,
@@ -80,6 +93,12 @@ app.post('/', optionalAuth, async (c) => {
   const guestId = crypto.randomUUID()
   const now = new Date().toISOString()
   const email = typeof guestData.email === 'string' ? guestData.email.toLowerCase() : null
+  
+  // Track guest funnel completion
+  await trackEvent(c, 'guest_funnel_complete', 'funnel', {
+    has_email: !!email,
+    step_count: Object.keys(guestData).length
+  })
 
   await DB.prepare(`
     INSERT INTO guest_funnel (id, email, data, created_at, updated_at)
