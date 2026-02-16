@@ -1,20 +1,22 @@
 # 📊 DASHBOARD - Business Plan SaaS
 
-**Dernière mise à jour:** 2026-02-16 09:10
+**Dernière mise à jour:** 2026-02-16 09:15
 **ScrumMaster:** @ScrumMaster
 **Sprint:** #1 - Fondations
+**🚨 MODE URGENCE: FIN À 10:45 (1h30 restant)**
 
 ---
 
-## 🎯 Statut Global
+## 🎯 Statut Global - 🔴 URGENCE
 
 | Métrique | Valeur | Status |
 |----------|--------|--------|
+| **⏰ FIN SPRINT** | **10:45** | 🔴 URGENT |
+| **⏱️ TEMPS RESTANT** | **~1h30** | 🔴 CRITIQUE |
 | **Progression Sprint** | 65% | 🟡 En cours |
+| **Scope** | RÉDUIT | 🟡 Minimum viable |
 | **Agents Actifs** | 7/7 | 🟢 OK |
-| **Issues Ouvertes** | 19 | 🟡 À traiter |
 | **PRs en attente** | 0 | 🟢 OK |
-| **Dernier commit** | 09:06 | 🟢 Récent |
 
 ---
 
@@ -32,21 +34,21 @@
 
 ---
 
-## 📦 Livrables Sprint #1
+## 📦 Livrables Sprint #1 (Scope Réduit 2H)
 
-| Livrable | Status | Agent |
-|----------|--------|-------|
-| ✅ Auth Magic Link | DONE | @BackendAgent |
-| ✅ CRUD Business Plan | DONE | @BackendAgent |
-| ✅ Stripe Checkout | DONE | @BackendAgent |
-| ✅ CI/CD GitHub Actions | DONE | @DevOpsAgent |
-| 🔄 Tests coverage > 80% | IN PROGRESS | @QAEngineer |
-| 🔄 Documentation API | IN PROGRESS | @BackendAgent |
-| 🔄 Feature flags | IN PROGRESS | @QAEngineer |
-| ⏳ Security & Secrets | TODO | @BackendAgent |
-| ⏳ Monitoring & Alerting | TODO | @DevOpsAgent |
-| ⏳ Onboarding Flow | TODO | @FrontendAgent |
-| ⏳ User Journey Mapping | TODO | @UXDesigner |
+| Livrable | Status | Agent | Priorité |
+|----------|--------|-------|----------|
+| ✅ Auth Magic Link | DONE | @BackendAgent | - |
+| ✅ CRUD Business Plan | DONE | @BackendAgent | - |
+| ✅ Stripe Checkout | DONE | @BackendAgent | - |
+| ✅ CI/CD GitHub Actions | DONE | @DevOpsAgent | - |
+| 🔴 **Security basique** | EN COURS | @BackendAgent | **CRITIQUE** |
+| 🔴 **Tests coverage** | EN COURS | @QAEngineer | **CRITIQUE** |
+| 🟡 Onboarding simple | EN COURS | @FrontendAgent | Optionnel |
+| ❌ ~~Feature flags~~ | ABANDONNÉ | - | Sprint #2 |
+| ❌ ~~Monitoring complexe~~ | ABANDONNÉ | - | Sprint #2 |
+| ❌ ~~UX avancée~~ | ABANDONNÉ | - | Sprint #2 |
+| ❌ ~~Documentation longue~~ | ABANDONNÉ | - | Sprint #2 |
 
 ---
 

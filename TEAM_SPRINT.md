@@ -5,53 +5,69 @@
 
 ---
 
-## 📊 Statut Global
+## 📊 Statut Global - 🚨 SPRINT 2H
 
 | Métrique | Valeur |
 |----------|--------|
+| **FIN SPRINT** | **10:45** ⏰ |
+| **TEMPS RESTANT** | **~1h35** 🔴 |
 | PRs mergées aujourd'hui | 4 ✅ |
-| Issues ouvertes | 19 |
+| Mode | URGENCE - Scope réduit |
 | App déployée | ✅ https://business-plan-saas.clawdgtko-2a7.workers.dev |
 | DB créée | ✅ business-plan-db-prod |
 
 ---
 
-## 🎯 Assignations par Agent
+## 🎯 NOUVEAU SCOPE - 2H MAX
 
-### @BackendAgent - Feature: Security & Secrets (#55)
-**Priorité: HIGH**
-- Créer branche: `feature/security-secrets`
-- Configurer JWT_SECRET dans wrangler
-- Implémenter middleware de sécurité renforcé
-- Secrets management pour production
+### 🚨 RÈGLES D'URGENCE
+- **UNIQUEMENT** les tâches critiques pour la livraison
+- **PAS** de feature flags, monitoring complexe, UX avancée
+- **FOCUS** : Security basique + Tests coverage
+- **Deadline** : 10:45 SHARP
 
-### @FrontendAgent - Feature: Onboarding Flow (#66)
-**Priorité: HIGH**
-- Créer branche: `feature/onboarding`
-- Page d'onboarding utilisateur
-- Formulaire personas
-- Funnel optimization (étapes)
+---
 
-### @DevOpsAgent - Feature: Monitoring & Alerting (#48)
-**Priorité: MEDIUM**
-- Créer branche: `feature/monitoring`
-- Setup Sentry ou alternative
-- Health checks avancés
-- Alertes sur erreurs
+### @BackendAgent - Security MINIMUM (#55) 🔴 CRITIQUE
+**Doit livrer avant 10:45:**
+- [ ] JWT_SECRET dans wrangler.toml (5 min)
+- [ ] Middleware auth vérifié (10 min)
+- [ ] **Tests pass + coverage report** (15 min)
+- **ABANDONNER:** Secrets management complexe
+- **OPTIONNEL:** Si temps restant → doc API basique
 
-### @QAEngineer - Feature: Feature Flags (#52)
-**Priorité: MEDIUM**
-- Créer branche: `feature/feature-flags`
-- Système de feature flags
-- Unleash ou config simple
-- Tests conditionnels
+### @FrontendAgent - Onboarding SIMPLIFIÉ (#66) 🟡 OPTIONNEL
+**SI temps après BackendAgent:**
+- [ ] Page onboarding basique (HTML simple)
+- [ ] **PAS** de funnel complexe
+- [ ] **PAS** de formulaire personas
+- **SINON:** Aider sur les tests
+- **Deadline:** 10:30 max, sinon abandon
 
-### @UXDesigner - Feature: User Journey Mapping (#61, #57)
-**Priorité: MEDIUM**
-- Créer branche: `feature/user-journey`
-- Documentation UX
-- Parcours utilisateur optimisé
-- Copywriting guidelines (#64)
+### @DevOpsAgent - Tests Coverage ONLY (#48) 🔴 CRITIQUE
+**ABANDONNER monitoring complexe**
+**Mission unique:**
+- [ ] Aider @BackendAgent sur les tests
+- [ ] Vérifier CI/CD passe bien
+- [ ] Coverage report > 80%
+- **PAS de:** Sentry, alerting, health checks avancés
+
+### @QAEngineer - Tests Coverage + Quality (#52) 🔴 CRITIQUE
+**ABANDONNER feature flags**
+**Mission unique:**
+- [ ] Tests backend complets
+- [ ] Tests frontend basiques
+- [ ] Coverage report
+- [ ] **Objectif: > 80% coverage**
+- **Deadline:** 10:45
+
+### @UXDesigner - REPORTÉ au Sprint #2 🟡
+**ABANDONNER pour ce sprint**
+- User Journey Mapping → Sprint #2
+- Personas → Sprint #2
+- Copywriting → Sprint #2
+
+**Si disponible:** Aider sur tests ou onboarding simplifié
 
 ### @ProductManager - Feature: Release Process (#54, #50, #51)
 **Priorité: LOW**
