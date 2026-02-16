@@ -1,0 +1,43 @@
+name: CD - Deploy Staging
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Deploy Worker to Staging
+      - name: Deploy Worker
+        working-directory: ./worker
+        run: |
+          npm ci
+          npx wrangler deploy --env staging
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      # Deploy Frontend to Pages (Staging)
+      - name: Deploy Frontend
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run build
+          # Upload to Cloudflare Pages or host
+        env:
+          VITE_API_URL: ${{ secrets.STAGING_API_URL }}
+
+      - name: Notify Slack
+        if: always()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"🚀 Staging deploy: ${{ job.status }}"}' \
+            ${{ secrets.SLACK_WEBHOOK_URL }} || true
