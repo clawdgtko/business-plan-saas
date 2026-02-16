@@ -1,0 +1,27 @@
+# Code Owners - Business Plan SaaS
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global fallback - tous les fichiers
+* @clawdgtko
+
+# Backend API - review dev requis
+/src/api/ @clawdgtko
+/src/db/ @clawdgtko
+
+# 🔥 PAIEMENT - QA Engineer OBLIGATOIRE
+# Toute modification du système de paiement doit être approuvée par QA
+/src/billing/ @clawdgtko
+/src/stripe/ @clawdgtko
+/src/webhooks/ @clawdgtko
+/src/subscriptions/ @clawdgtko
+/src/payment/ @clawdgtko
+/src/pricing/ @clawdgtko
+
+# Tests Stripe - QA review required
+/tests/stripe/ @clawdgtko
+/tests/billing/ @clawdgtko
+/tests/e2e/payment/ @clawdgtko
+
+# Infrastructure critique
+/wrangler.toml @clawdgtko
+.github/workflows/ @clawdgtko
