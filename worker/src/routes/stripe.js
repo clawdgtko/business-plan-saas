@@ -1,6 +1,7 @@
 // Stripe Routes - Express Checkout
 import { Hono } from 'hono'
 import { auth } from '../middleware/auth.js'
+import { trackEvent } from '../middleware/analytics.js'
 
 const app = new Hono()
 
@@ -79,12 +80,38 @@ app.post('/webhook', async (c) => {
   const event = JSON.parse(body)
   
   switch (event.type) {
-    case 'checkout.session.completed':
+    case 'checkout.session.completed': {
       // Update subscription in DB
+      const session = event.data.object
+      
+      // Track successful subscription
+      await trackEvent(c, 'subscription_complete', 'conversion', {
+        customer_id: session.customer,
+        amount_total: session.amount_total,
+        currency: session.currency,
+        payment_status: session.payment_status
+      })
       break
-    case 'invoice.paid':
+    }
+    case 'invoice.paid': {
       // Extend subscription period
+      const invoice = event.data.object
+      
+      await trackEvent(c, 'invoice_paid', 'conversion', {
+        customer_id: invoice.customer,
+        amount_paid: invoice.amount_paid,
+        subscription_id: invoice.subscription
+      })
       break
+    }
+    case 'customer.subscription.deleted': {
+      // Track cancellation
+      await trackEvent(c, 'subscription_cancelled', 'conversion', {
+        subscription_id: event.data.object.id,
+        cancel_at_period_end: event.data.object.cancel_at_period_end
+      })
+      break
+    }
   }
   
   return c.json({ received: true })

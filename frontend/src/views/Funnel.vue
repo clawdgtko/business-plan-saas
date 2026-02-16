@@ -1,17 +1,40 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
     <!-- Progress Header -->
-    <header class="bg-white border-b sticky top-0 z-10">
+    <header class="bg-white/5 backdrop-blur-lg border-b border-white/10 sticky top-0 z-50">
       <div class="max-w-4xl mx-auto px-4 py-4">
-        <div class="flex items-center justify-between mb-4">
-          <h1 class="text-lg font-semibold">{{ currentStep.title }}</h1>
-          <span class="text-sm text-gray-500">
-            Étape {{ currentStepIndex + 1 }} / {{ steps.length }}
-          </span>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-3">
+            <button 
+              v-if="currentStepIndex > 0"
+              @click="prevStep"
+              class="p-2 rounded-lg hover:bg-white/10 transition-colors text-white/60 hover:text-white"
+              title="Retour"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <h1 class="text-lg font-semibold text-white">{{ currentStep.title }}</h1>
+          </div>
+          
+          <div class="flex items-center gap-4">
+            <!-- Auto-save indicator -->
+            <AutoSaveIndicator 
+              :status="saveStatus" 
+              :last-saved="lastSaved"
+            />
+            
+            <span class="text-sm text-white/50">
+              {{ currentStepIndex + 1 }} / {{ steps.length }}
+            </span>
+          </div>
         </div>
-        <div class="h-2 bg-gray-200 rounded-full">
+        
+        <!-- Progress bar -->
+        <div class="relative h-2 bg-white/10 rounded-full overflow-hidden">
           <div 
-            class="h-full bg-primary-600 rounded-full transition-all"
+            class="absolute inset-y-0 left-0 bg-gradient-to-r from-amber-400 via-orange-500 to-fuchsia-500 rounded-full transition-all duration-500 ease-out"
             :style="{ width: `${((currentStepIndex + 1) / steps.length) * 100}%` }"
           />
         </div>
@@ -19,179 +42,347 @@
     </header>
 
     <!-- Form Content -->
-    <main class="max-w-4xl mx-auto px-4 py-8">
-      <div class="bg-white rounded-xl shadow-sm p-8">
-        <!-- Step: Business Info -->
-        <div v-if="currentStep.id === 'business-info'" class="space-y-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">
-              Nom de l'entreprise
-            </label>
-            <input 
-              v-model="formData.businessName"
-              type="text"
-              class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-              placeholder="Ma Super Entreprise"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">
-              Description
-            </label>
-            <textarea 
-              v-model="formData.description"
-              rows="4"
-              class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-              placeholder="Décrivez votre activité..."
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">
-              Secteur d'activité
-            </label>
-            <select 
-              v-model="formData.sector"
-              class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-            >
-              <option value="">Sélectionnez...</option>
-              <option value="tech">Technologie / SaaS</option>
-              <option value="ecommerce">E-commerce</option>
-              <option value="services">Services</option>
-              <option value="industry">Industrie</option>
-              <option value="other">Autre</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Step: Market -->
-        <div v-else-if="currentStep.id === 'market'" class="space-y-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">
-              Taille du marché (TAM)
-            </label>
-            <input 
-              v-model="formData.marketSize"
-              type="text"
-              class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-              placeholder="Ex: 10 milliards €"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">
-              Concurrents principaux
-            </label>
-            <textarea 
-              v-model="formData.competitors"
-              rows="4"
-              class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-              placeholder="Listez vos principaux concurrents..."
-            />
-          </div>
-        </div>
-
-        <!-- Step: Financial -->
-        <div v-else-if="currentStep.id === 'financial'" class="space-y-6">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700">
-                CA Année 1
-              </label>
-              <input 
-                v-model="formData.revenueYear1"
-                type="number"
-                class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-                placeholder="0"
-              />
+    <main class="max-w-4xl mx-auto px-4 py-8 pb-32">
+      <div class="rounded-3xl border border-white/10 bg-white/10 backdrop-blur-2xl p-8 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.8)]">
+        
+        <StepTransition :direction="transitionDirection">
+          <!-- Step: Business Info -->
+          <div v-if="currentStep.id === 'business-info'" key="business-info" class="space-y-6">
+            <div class="text-center mb-8">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-orange-500/20 mb-4">
+                <svg class="w-8 h-8 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <h2 class="text-2xl font-bold text-white">Votre entreprise</h2>
+              <p class="text-white/60 mt-2">Commençons par les informations de base</p>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700">
-                CA Année 3
-              </label>
-              <input 
-                v-model="formData.revenueYear3"
-                type="number"
-                class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-                placeholder="0"
-              />
+            
+            <div class="space-y-5">
+              <div class="group">
+                <label class="block text-sm font-medium text-white/80 mb-2">
+                  Nom de l'entreprise <span class="text-fuchsia-400">*</span>
+                </label>
+                <input 
+                  v-model="formData.businessName"
+                  type="text"
+                  :class="[
+                    'w-full rounded-xl border bg-white/5 px-4 py-3 text-white placeholder:text-white/30 transition-all duration-200',
+                    validationErrors.businessName 
+                      ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
+                      : 'border-white/10 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/40'
+                  ]"
+                  placeholder="Ma Super Entreprise"
+                  @blur="validateField('businessName')"
+                />
+                <p v-if="validationErrors.businessName" class="mt-1 text-sm text-red-400">
+                  {{ validationErrors.businessName }}
+                </p>
+              </div>
+              
+              <div class="group">
+                <label class="block text-sm font-medium text-white/80 mb-2">
+                  Description <span class="text-fuchsia-400">*</span>
+                </label>
+                <textarea 
+                  v-model="formData.description"
+                  rows="4"
+                  :class="[
+                    'w-full rounded-xl border bg-white/5 px-4 py-3 text-white placeholder:text-white/30 transition-all duration-200 resize-none',
+                    validationErrors.description 
+                      ? 'border-red-500/50 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
+                      : 'border-white/10 focus:border-purple-400 focus:ring-2 focus:ring-purple-400/40'
+                  ]"
+                  placeholder="Décrivez votre activité en quelques lignes..."
+                  @blur="validateField('description')"
+                />
+                <div class="flex justify-between mt-1">
+                  <p v-if="validationErrors.description" class="text-sm text-red-400">
+                    {{ validationErrors.description }}
+                  </p>
+                  <p v-else class="text-xs text-white/40">
+                    {{ formData.description.length }}/500 caractères
+                  </p>
+                </div>
+              </div>
+              
+              <div class="group">
+                <label class="block text-sm font-medium text-white/80 mb-2">
+                  Secteur d'activité <span class="text-fuchsia-400">*</span>
+                </label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <button
+                    v-for="sector in sectors"
+                    :key="sector.value"
+                    type="button"
+                    @click="formData.sector = sector.value"
+                    :class="[
+                      'p-3 rounded-xl border text-sm font-medium transition-all duration-200',
+                      formData.sector === sector.value
+                        ? 'border-amber-400 bg-amber-400/20 text-amber-300'
+                        : 'border-white/10 bg-white/5 text-white/70 hover:bg-white/10'
+                    ]"
+                  >
+                    <span class="block text-2xl mb-1">{{ sector.icon }}</span>
+                    {{ sector.label }}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">
-              Besoin en financement
-            </label>
-            <input 
-              v-model="formData.fundingNeeded"
-              type="number"
-              class="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2"
-              placeholder="0"
-            />
-          </div>
-        </div>
 
-        <!-- Step: Review -->
-        <div v-else-if="currentStep.id === 'review'" class="space-y-6">
-          <h3 class="font-semibold">Récapitulatif</h3>
-          <div class="bg-gray-50 p-4 rounded-lg">
-            <pre class="text-sm">{{ JSON.stringify(formData, null, 2) }}</pre>
+          <!-- Step: Market -->
+          <div v-else-if="currentStep.id === 'market'" key="market" class="space-y-6">
+            <div class="text-center mb-8">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-fuchsia-400/20 to-purple-500/20 mb-4">
+                <svg class="w-8 h-8 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+              </div>
+              <h2 class="text-2xl font-bold text-white">Analyse de marché</h2>
+              <p class="text-white/60 mt-2">Comprendre votre positionnement</p>
+            </div>
+            
+            <div class="space-y-5">
+              <div class="group">
+                <label class="block text-sm font-medium text-white/80 mb-2">
+                  Taille du marché (TAM)
+                </label>
+                <div class="relative">
+                  <input 
+                    v-model="formData.marketSize"
+                    type="text"
+                    class="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 pl-12 text-white placeholder:text-white/30 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/40 transition-all"
+                    placeholder="Ex: 10 milliards €"
+                  />
+                  <span class="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">€</span>
+                </div>
+                <p class="mt-1 text-xs text-white/40">Total Addressable Market - estimation globale</p>
+              </div>
+              
+              <div class="group">
+                <label class="block text-sm font-medium text-white/80 mb-2">
+                  Concurrents principaux
+                </label>
+                <div class="space-y-2">
+                  <div 
+                    v-for="(competitor, index) in competitorsList" 
+                    :key="index"
+                    class="flex items-center gap-2"
+                  >
+                    <input 
+                      v-model="competitorsList[index]"
+                      type="text"
+                      class="flex-1 rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-white placeholder:text-white/30 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/40"
+                      :placeholder="`Concurrent ${index + 1}`"
+                    />
+                    <button 
+                      @click="removeCompetitor(index)"
+                      class="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                    >
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                  <button 
+                    @click="addCompetitor"
+                    class="flex items-center gap-2 text-sm text-amber-400 hover:text-amber-300 transition-colors py-2"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Ajouter un concurrent
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
-            <p class="text-sm text-yellow-800">
-              🎉 Vous avez complété toutes les étapes ! 
-              Passez à l'abonnement pour télécharger votre PDF.
-            </p>
-          </div>
-        </div>
 
-        <!-- Navigation -->
-        <div class="flex justify-between mt-8 pt-6 border-t">
+          <!-- Step: Financial -->
+          <div v-else-if="currentStep.id === 'financial'" key="financial" class="space-y-6">
+            <div class="text-center mb-8">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400/20 to-teal-500/20 mb-4">
+                <svg class="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h2 class="text-2xl font-bold text-white">Prévisions financières</h2>
+              <p class="text-white/60 mt-2">Vos projections sur 3 ans</p>
+            </div>
+            
+            <div class="space-y-5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div 
+                  v-for="(year, idx) in [1, 2, 3]" 
+                  :key="year"
+                  class="rounded-xl border border-white/10 bg-white/5 p-4"
+                >
+                  <label class="block text-sm font-medium text-white/60 mb-2">
+                    Chiffre d'affaires - Année {{ year }}
+                  </label>
+                  <div class="relative">
+                    <input 
+                      v-model="formData[`revenueYear${year}`]"
+                      type="number"
+                      class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 pl-10 text-white placeholder:text-white/30 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/40"
+                      placeholder="0"
+                    />
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">€</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <label class="block text-sm font-medium text-white/60 mb-2">
+                  Besoin en financement
+                </label>
+                <div class="relative">
+                  <input 
+                    v-model="formData.fundingNeeded"
+                    type="number"
+                    class="w-full rounded-lg border border-white/10 bg-white/5 px-4 py-2 pl-10 text-white placeholder:text-white/30 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-400/40"
+                    placeholder="0"
+                  />
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 text-sm">€</span>
+                </div>
+                <p class="mt-2 text-xs text-white/40">Montant nécessaire pour lancer votre projet</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step: Review -->
+          <div v-else-if="currentStep.id === 'review'" key="review" class="space-y-6">
+            <div class="text-center mb-8">
+              <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-green-400/20 to-emerald-500/20 mb-4">
+                <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h2 class="text-2xl font-bold text-white">Récapitulatif</h2>
+              <p class="text-white/60 mt-2">Vérifiez vos informations avant de continuer</p>
+            </div>
+            
+            <div class="space-y-4">
+              <div class="rounded-xl border border-white/10 bg-white/5 p-4 space-y-3">
+                <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                  <span class="text-white/60">Entreprise</span>
+                  <span class="text-white font-medium">{{ formData.businessName || '-' }}</span>
+                </div>
+                <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                  <span class="text-white/60">Secteur</span>
+                  <span class="text-white font-medium">{{ getSectorLabel(formData.sector) || '-' }}</span>
+                </div>
+                <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                  <span class="text-white/60">Marché</span>
+                  <span class="text-white font-medium">{{ formData.marketSize || '-' }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-white/60">Financement</span>
+                  <span class="text-white font-medium">{{ formData.fundingNeeded ? `€${formData.fundingNeeded}` : '-' }}</span>
+                </div>
+              </div>
+              
+              <div class="rounded-xl border border-amber-400/30 bg-amber-400/10 p-4">
+                <div class="flex items-start gap-3">
+                  <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  <div>
+                    <p class="text-amber-300 font-medium">Presque terminé !</p>
+                    <p class="text-amber-200/70 text-sm mt-1">
+                      Passez à l'abonnement pour générer votre PDF professionnel et accéder à toutes les fonctionnalités.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </StepTransition>
+      </div>
+    </main>
+
+    <!-- Sticky Navigation Footer -->
+    <footer class="fixed bottom-0 left-0 right-0 bg-white/5 backdrop-blur-lg border-t border-white/10">
+      <div class="max-w-4xl mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
           <button 
             v-if="currentStepIndex > 0"
             @click="prevStep"
-            class="px-4 py-2 text-gray-600 hover:text-gray-900"
+            class="flex items-center gap-2 px-4 py-2 text-white/60 hover:text-white transition-colors"
           >
-            ← Précédent
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Précédent
           </button>
           <div v-else />
           
           <button 
             v-if="currentStepIndex < steps.length - 1"
             @click="nextStep"
-            class="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700"
+            :disabled="!isCurrentStepValid"
+            class="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-400 via-orange-500 to-fuchsia-500 text-white font-semibold shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:translate-y-[-1px]"
           >
-            Suivant →
+            Suivant
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
           </button>
           
           <button 
             v-else
             @click="goToCheckout"
-            class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+            class="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-white font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all hover:translate-y-[-1px]"
           >
-            Payer et télécharger →
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+            Débloquer mon plan
           </button>
         </div>
       </div>
-    </main>
+    </footer>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGuestStore } from '../stores/guest.js'
+import { useBusinessPlanStore } from '../stores/businessPlan.js'
+import AutoSaveIndicator from '../components/AutoSaveIndicator.vue'
+import StepTransition from '../components/StepTransition.vue'
 
 const route = useRoute()
 const router = useRouter()
 const guestStore = useGuestStore()
+const bpStore = useBusinessPlanStore()
 
+// Steps configuration
 const steps = [
-  { id: 'business-info', title: 'Informations de l\'entreprise' },
-  { id: 'market', title: 'Analyse de marché' },
-  { id: 'financial', title: 'Prévisions financières' },
+  { id: 'business-info', title: 'Votre entreprise' },
+  { id: 'market', title: 'Marché' },
+  { id: 'financial', title: 'Finances' },
   { id: 'review', title: 'Récapitulatif' }
 ]
 
+const sectors = [
+  { value: 'tech', label: 'Tech / SaaS', icon: '💻' },
+  { value: 'ecommerce', label: 'E-commerce', icon: '🛒' },
+  { value: 'services', label: 'Services', icon: '🤝' },
+  { value: 'industry', label: 'Industrie', icon: '🏭' },
+  { value: 'food', label: 'Restauration', icon: '🍽️' },
+  { value: 'other', label: 'Autre', icon: '✨' }
+]
+
+// State
 const currentStepIndex = ref(0)
-const currentStep = computed(() => steps[currentStepIndex.value])
+const transitionDirection = ref('forward')
+const saveStatus = ref('idle')
+const lastSaved = ref(null)
+const saveTimeout = ref(null)
+const validationErrors = reactive({})
 
 const formData = reactive({
   businessName: '',
@@ -200,37 +391,166 @@ const formData = reactive({
   marketSize: '',
   competitors: '',
   revenueYear1: '',
+  revenueYear2: '',
   revenueYear3: '',
   fundingNeeded: ''
 })
 
-function nextStep() {
-  if (currentStepIndex.value < steps.length - 1) {
+const competitorsList = ref([''])
+
+const currentStep = computed(() => steps[currentStepIndex.value])
+
+const isCurrentStepValid = computed(() => {
+  switch (currentStep.value.id) {
+    case 'business-info':
+      return !!(formData.businessName.trim() && formData.description.trim() && formData.sector)
+    case 'market':
+      return true // Optional fields
+    case 'financial':
+      return true // Optional fields
+    default:
+      return true
+  }
+})
+
+// Methods
+function validateField(field) {
+  validationErrors[field] = null
+  
+  switch (field) {
+    case 'businessName':
+      if (!formData.businessName.trim()) {
+        validationErrors.businessName = 'Le nom de l\'entreprise est requis'
+      } else if (formData.businessName.trim().length < 2) {
+        validationErrors.businessName = 'Le nom doit contenir au moins 2 caractères'
+      }
+      break
+    case 'description':
+      if (!formData.description.trim()) {
+        validationErrors.description = 'La description est requise'
+      } else if (formData.description.trim().length < 10) {
+        validationErrors.description = 'La description doit contenir au moins 10 caractères'
+      }
+      break
+  }
+}
+
+function addCompetitor() {
+  competitorsList.value.push('')
+}
+
+function removeCompetitor(index) {
+  competitorsList.value.splice(index, 1)
+  if (competitorsList.value.length === 0) {
+    competitorsList.value.push('')
+  }
+}
+
+function getSectorLabel(value) {
+  const sector = sectors.find(s => s.value === value)
+  return sector ? sector.label : value
+}
+
+async function saveProgress() {
+  if (saveStatus.value === 'saving') return
+  
+  saveStatus.value = 'saving'
+  
+  try {
+    // Update competitors from list
+    formData.competitors = competitorsList.value.filter(c => c.trim()).join(', ')
+    
+    // Save to store
     guestStore.saveFunnelData({ ...formData })
+    
+    // If authenticated with business plan ID, save to API
+    if (route.params.id) {
+      await bpStore.updateBusinessPlan(route.params.id, formData)
+    }
+    
+    saveStatus.value = 'saved'
+    lastSaved.value = new Date()
+    
+    // Reset to idle after 3 seconds
+    setTimeout(() => {
+      if (saveStatus.value === 'saved') {
+        saveStatus.value = 'idle'
+      }
+    }, 3000)
+  } catch (error) {
+    saveStatus.value = 'error'
+    console.error('Save error:', error)
+  }
+}
+
+function debouncedSave() {
+  clearTimeout(saveTimeout.value)
+  saveTimeout.value = setTimeout(() => {
+    saveProgress()
+  }, 1000)
+}
+
+function nextStep() {
+  if (currentStepIndex.value < steps.length - 1 && isCurrentStepValid.value) {
+    // Validate current step
+    if (currentStep.value.id === 'business-info') {
+      validateField('businessName')
+      validateField('description')
+      if (validationErrors.businessName || validationErrors.description) {
+        return
+      }
+    }
+    
+    transitionDirection.value = 'forward'
+    saveProgress()
     currentStepIndex.value++
   }
 }
 
 function prevStep() {
   if (currentStepIndex.value > 0) {
+    transitionDirection.value = 'backward'
+    saveProgress()
     currentStepIndex.value--
   }
 }
 
 function goToCheckout() {
-  guestStore.saveFunnelData({ ...formData })
+  saveProgress()
   router.push('/checkout')
 }
 
-// Load existing data if editing
+// Watch for changes to auto-save
+watch(formData, () => {
+  debouncedSave()
+}, { deep: true })
+
+watch(competitorsList, () => {
+  debouncedSave()
+}, { deep: true })
+
+// Load existing data
 onMounted(async () => {
-  if (route.params.id) {
-    // TODO: Load business plan data
-    console.log('Loading BP:', route.params.id)
+  // Load from guest store
+  if (guestStore.hasFunnelData) {
+    const saved = guestStore.getFunnelData()
+    Object.assign(formData, saved)
+    if (saved.competitors) {
+      const comps = saved.competitors.split(',').map(c => c.trim()).filter(c => c)
+      competitorsList.value = comps.length > 0 ? comps : ['']
+    }
   }
   
-  if (guestStore.hasFunnelData) {
-    Object.assign(formData, guestStore.getFunnelData())
+  // Load from API if editing
+  if (route.params.id) {
+    try {
+      const plan = await bpStore.fetchBusinessPlan(route.params.id)
+      if (plan) {
+        Object.assign(formData, plan.data || {})
+      }
+    } catch (error) {
+      console.error('Failed to load business plan:', error)
+    }
   }
 })
 </script>
