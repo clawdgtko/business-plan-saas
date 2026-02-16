@@ -16,6 +16,12 @@ export const businessPlanSectionSchema = z.object({
   data: z.record(z.any())
 })
 
+// Schema for updating a section (body only - section comes from URL param)
+export const updateSectionSchema = z.record(z.any()).refine(
+  (data) => Object.keys(data).length > 0,
+  { message: 'Section data cannot be empty' }
+)
+
 // Auth schemas
 export const magicLinkRequestSchema = z.object({
   email: z.string().email()
