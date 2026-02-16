@@ -17,6 +17,7 @@ import adminRoutes from './routes/admin.js'
 import feedbackRoutes from './routes/feedback.js'
 import abTestingRoutes from './routes/ab-testing.js'
 import heatmapRoutes from './routes/heatmap.js'
+import securityRoutes from './routes/security.js'
 
 // Import middleware
 import { auth } from './middleware/auth.js'
@@ -60,6 +61,7 @@ app.route('/api/admin', adminRoutes)
 app.route('/api/feedback', feedbackRoutes)
 app.route('/api/ab-test', abTestingRoutes)
 app.route('/api/heatmap', heatmapRoutes)
+app.route('/api', securityRoutes)
 
 // 404 handler
 app.notFound((c) => {

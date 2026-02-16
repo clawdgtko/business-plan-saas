@@ -4,13 +4,15 @@ import onboarding from './002_onboarding.js'
 import guestFunnel from './003_guest_funnel.js'
 import analytics from './004_analytics.js'
 import uxAnalytics from './005_ux_analytics.js'
+import securityRbac from './006_security_rbac.js'
 
 const migrations = [
   { name: '001_initial', ...initial },
   { name: '002_onboarding', ...onboarding },
   { name: '003_guest_funnel', ...guestFunnel },
   { name: '004_analytics', ...analytics },
-  { name: '005_ux_analytics', ...uxAnalytics }
+  { name: '005_ux_analytics', ...uxAnalytics },
+  { name: '006_security_rbac', ...securityRbac }
 ]
 
 export async function runMigrations(db) {
