@@ -1,7 +1,4 @@
-import { Hono } from 'hono'
 import { verify } from 'hono/jwt'
-
-const JWT_SECRET = 'dev-secret-change-in-production'
 
 // Auth middleware
 export async function auth(c, next) {
@@ -12,9 +9,10 @@ export async function auth(c, next) {
   }
   
   const token = authHeader.slice(7)
+  const jwtSecret = c.env.JWT_SECRET
   
   try {
-    const payload = await verify(token, JWT_SECRET)
+    const payload = await verify(token, jwtSecret)
     c.set('user', payload)
     await next()
   } catch (e) {
@@ -28,8 +26,9 @@ export async function optionalAuth(c, next) {
   
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.slice(7)
+    const jwtSecret = c.env.JWT_SECRET
     try {
-      const payload = await verify(token, JWT_SECRET)
+      const payload = await verify(token, jwtSecret)
       c.set('user', payload)
     } catch (e) {
       // Invalid token, continue without user

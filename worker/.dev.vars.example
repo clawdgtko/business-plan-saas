@@ -1,0 +1,7 @@
+# Development secrets - NEVER COMMIT THIS FILE
+# Copy to .dev.vars and fill with real values
+
+JWT_SECRET=dev-jwt-secret-change-in-production-min-32-chars-long-ok
+STRIPE_SECRET_KEY=sk_test_
+STRIPE_WEBHOOK_SECRET=whsec_
+RESEND_API_KEY=re_

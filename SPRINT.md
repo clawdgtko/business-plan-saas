@@ -134,5 +134,6 @@ Avoir une app fonctionnelle avec auth, CRUD business plan, et paiement basique.
 
 ---
 
-*Dernière mise à jour: 2026-02-16 08:50*  
-*Prochain check: 2026-02-16 10:00*
+*Dernière mise à jour: 2026-02-16 (Rapport PM envoyé à Grégoire)*  
+*Prochain rapport: 2026-02-17 09:00*  
+*Rapport courant: `/docs/reports/RAPPORT_2026-02-16.md`*

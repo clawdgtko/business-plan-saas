@@ -14,5 +14,7 @@ ENVIRONMENT = "development"
 # - STRIPE_SECRET_KEY
 # - STRIPE_PUBLISHABLE_KEY
 # - STRIPE_WEBHOOK_SECRET
-# - JWT_SECRET
+# - JWT_SECRET  (REQUIRED - générer avec: openssl rand -base64 32)
 # - RESEND_API_KEY
+#
+# Local dev: créer .dev.vars avec ces secrets

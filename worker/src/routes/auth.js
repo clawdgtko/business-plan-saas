@@ -3,8 +3,8 @@ import { sign, verify } from 'hono/jwt'
 
 const app = new Hono()
 
-// JWT Secret - en prod via wrangler secret
-const JWT_SECRET = 'dev-secret-change-in-production'
+// JWT Secret - récupéré des variables d'environnement Cloudflare
+const getJwtSecret = (c) => c.env.JWT_SECRET
 
 // Generate random token
 function generateToken() {
@@ -77,7 +77,7 @@ app.get('/verify/:token', async (c) => {
     userId: user.id, 
     email: user.email,
     exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7 // 7 days
-  }, JWT_SECRET)
+  }, getJwtSecret(c))
   
   return c.json({ 
     success: true, 
@@ -100,7 +100,7 @@ app.get('/me', async (c) => {
   const token = authHeader.slice(7)
   
   try {
-    const payload = await verify(token, JWT_SECRET)
+    const payload = await verify(token, getJwtSecret(c))
     return c.json({
       user: {
         id: payload.userId,
