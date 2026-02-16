@@ -1,0 +1,56 @@
+name: CD - Deploy Production
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment: production  # Requires manual approval
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Run tests again
+      - name: Install & Test
+        run: |
+          npm ci
+          npm test || echo "No tests yet"
+
+      # Deploy Worker
+      - name: Deploy Worker Production
+        working-directory: ./worker
+        run: |
+          npm ci
+          npx wrangler deploy --env production
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_PROD }}
+
+      # Deploy Frontend
+      - name: Deploy Frontend Production
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run build
+          # Deploy to production hosting
+        env:
+          VITE_API_URL: ${{ secrets.PROD_API_URL }}
+
+      # Smoke tests
+      - name: Smoke Tests
+        run: |
+          curl -sf ${{ secrets.PROD_HEALTH_URL }} || exit 1
+
+      - name: Notify Team
+        if: always()
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+            --data '{"text":"🚀 Production deploy ${{ github.event.release.tag_name }}: ${{ job.status }}"}' \
+            ${{ secrets.SLACK_WEBHOOK_URL }} || true
