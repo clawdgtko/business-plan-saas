@@ -84,11 +84,47 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
   
+  async function completeOnboarding(onboardingData) {
+    loading.value = true
+    error.value = null
+    
+    try {
+      const res = await fetch(`${API_URL}/api/onboarding`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token.value}`
+        },
+        body: JSON.stringify(onboardingData)
+      })
+      
+      const data = await res.json()
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Erreur lors de l\'onboarding')
+      }
+      
+      // Update user with onboarding info
+      user.value = { ...user.value, ...onboardingData, onboardingCompleted: true }
+      
+      return data
+    } catch (e) {
+      error.value = e.message
+      throw e
+    } finally {
+      loading.value = false
+    }
+  }
+  
   function logout() {
     token.value = null
     user.value = null
     localStorage.removeItem('bp_token')
   }
+  
+  const onboardingCompleted = computed(() => {
+    return user.value?.onboardingCompleted || false
+  })
   
   return {
     token,
@@ -96,9 +132,11 @@ export const useAuthStore = defineStore('auth', () => {
     loading,
     error,
     isAuthenticated,
+    onboardingCompleted,
     requestMagicLink,
     verifyToken,
     fetchUser,
+    completeOnboarding,
     logout
   }
 })

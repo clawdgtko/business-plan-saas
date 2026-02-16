@@ -4,12 +4,14 @@ import Login from '../views/Login.vue'
 import Verify from '../views/Verify.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Funnel from '../views/Funnel.vue'
+import Onboarding from '../views/Onboarding.vue'
 import { useAuthStore } from '../stores/auth.js'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
   { path: '/login', name: 'Login', component: Login },
   { path: '/auth/verify', name: 'Verify', component: Verify },
+  { path: '/onboarding', name: 'Onboarding', component: Onboarding },
   { 
     path: '/dashboard', 
     name: 'Dashboard', 

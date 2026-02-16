@@ -1,6 +1,8 @@
 // Business Plan Routes - CRUD + Funnel
 import { Hono } from 'hono'
 import { auth } from '../middleware/auth.js'
+import { validateBody } from '../middleware/validation.js'
+import { createBusinessPlanSchema } from '../validators/index.js'
 
 const app = new Hono()
 
@@ -22,10 +24,10 @@ app.get('/', async (c) => {
 })
 
 // Create new business plan
-app.post('/', async (c) => {
+app.post('/', validateBody(createBusinessPlanSchema), async (c) => {
   const { DB } = c.env
   const user = c.get('user')
-  const data = await c.req.json()
+  const data = c.get('validatedData')
   
   const id = crypto.randomUUID()
   const now = new Date().toISOString()
