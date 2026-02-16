@@ -11,6 +11,9 @@ import businessPlanRoutes from './routes/business-plan.js'
 import stripeRoutes from './routes/stripe.js'
 import exportRoutes from './routes/export.js'
 
+// Import middleware
+import { auth } from './middleware/auth.js'
+
 const app = new Hono()
 
 // Middleware
