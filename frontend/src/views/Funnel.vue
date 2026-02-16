@@ -177,9 +177,11 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useGuestStore } from '../stores/guest.js'
 
 const route = useRoute()
 const router = useRouter()
+const guestStore = useGuestStore()
 
 const steps = [
   { id: 'business-info', title: 'Informations de l\'entreprise' },
@@ -204,6 +206,7 @@ const formData = reactive({
 
 function nextStep() {
   if (currentStepIndex.value < steps.length - 1) {
+    guestStore.saveFunnelData({ ...formData })
     currentStepIndex.value++
   }
 }
@@ -215,8 +218,8 @@ function prevStep() {
 }
 
 function goToCheckout() {
-  // TODO: Integrate Stripe Express Checkout
-  alert('Redirection vers Stripe Express Checkout...')
+  guestStore.saveFunnelData({ ...formData })
+  router.push('/checkout')
 }
 
 // Load existing data if editing
@@ -224,6 +227,10 @@ onMounted(async () => {
   if (route.params.id) {
     // TODO: Load business plan data
     console.log('Loading BP:', route.params.id)
+  }
+  
+  if (guestStore.hasFunnelData) {
+    Object.assign(formData, guestStore.getFunnelData())
   }
 })
 </script>

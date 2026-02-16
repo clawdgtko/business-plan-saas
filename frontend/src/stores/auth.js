@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const loading = ref(false)
   const error = ref(null)
+  const devLink = ref(null)
   
   // Getters
   const isAuthenticated = computed(() => !!token.value)
@@ -17,6 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function requestMagicLink(email) {
     loading.value = true
     error.value = null
+    devLink.value = null
     
     try {
       const res = await fetch(`${API_URL}/api/auth/magic-link`, {
@@ -31,6 +33,7 @@ export const useAuthStore = defineStore('auth', () => {
         throw new Error(data.error || 'Erreur')
       }
       
+      devLink.value = data.devLink || null
       return data
     } catch (e) {
       error.value = e.message
@@ -83,19 +86,55 @@ export const useAuthStore = defineStore('auth', () => {
       logout()
     }
   }
+
+  async function fetchOnboardingStatus() {
+    if (!token.value) return null
+    
+    try {
+      const res = await fetch(`${API_URL}/api/onboarding/status`, {
+        headers: { 'Authorization': `Bearer ${token.value}` }
+      })
+      
+      const data = await res.json()
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Erreur')
+      }
+      
+      if (data.profile) {
+        user.value = { ...user.value, ...data.profile }
+      }
+      user.value = { ...user.value, onboardingCompleted: data.completed }
+      
+      return data
+    } catch (e) {
+      error.value = e.message
+      throw e
+    }
+  }
   
   async function completeOnboarding(onboardingData) {
     loading.value = true
     error.value = null
     
     try {
+      if (!token.value) {
+        throw new Error('Non authentifié')
+      }
+      
+      const payload = {
+        name: onboardingData.name,
+        company: onboardingData.company,
+        goal: onboardingData.goal
+      }
+      
       const res = await fetch(`${API_URL}/api/onboarding`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token.value}`
         },
-        body: JSON.stringify(onboardingData)
+        body: JSON.stringify(payload)
       })
       
       const data = await res.json()
@@ -105,7 +144,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
       
       // Update user with onboarding info
-      user.value = { ...user.value, ...onboardingData, onboardingCompleted: true }
+      user.value = { ...user.value, ...payload, onboardingCompleted: true }
       
       return data
     } catch (e) {
@@ -131,11 +170,13 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     loading,
     error,
+    devLink,
     isAuthenticated,
     onboardingCompleted,
     requestMagicLink,
     verifyToken,
     fetchUser,
+    fetchOnboardingStatus,
     completeOnboarding,
     logout
   }

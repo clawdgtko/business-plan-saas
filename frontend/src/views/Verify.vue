@@ -56,10 +56,27 @@ onMounted(async () => {
   
   try {
     await authStore.verifyToken(token)
+    try {
+      await authStore.fetchOnboardingStatus()
+    } catch (e) {
+      // Ignore onboarding status errors
+    }
     success.value = true
     
     // Redirect after 1.5s
     setTimeout(() => {
+      const redirectTo = localStorage.getItem('bp_redirect_after_login')
+      if (redirectTo) {
+        localStorage.removeItem('bp_redirect_after_login')
+        router.push(redirectTo)
+        return
+      }
+      
+      if (!authStore.onboardingCompleted) {
+        router.push('/onboarding')
+        return
+      }
+      
       router.push('/dashboard')
     }, 1500)
   } catch (e) {

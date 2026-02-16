@@ -27,6 +27,15 @@ export const onboardingSchema = z.object({
   goal: z.string().min(10).max(1000)
 })
 
+export const guestOnboardingSchema = z.object({
+  email: z.string().email().optional(),
+  funnel: z.record(z.any()).optional(),
+  step: z.string().min(1).max(50).optional(),
+  source: z.string().min(1).max(100).optional()
+}).passthrough().refine((data) => Object.keys(data).length > 0, {
+  message: 'Payload vide'
+})
+
 // Stripe schemas
 export const checkoutSessionSchema = z.object({
   priceId: z.string().startsWith('price_'),

@@ -30,7 +30,7 @@
         </div>
 
         <!-- Magic Link Form -->
-        <form @submit.prevent="handleSubmit" class="space-y-4">
+        <form v-if="!authStore.isAuthenticated" @submit.prevent="handleSubmit" class="space-y-4">
           <div>
             <label class="block text-sm font-medium text-white/80 mb-2">Votre email</label>
             <input 
@@ -52,10 +52,19 @@
           </button>
         </form>
 
+        <div v-else class="rounded-xl border border-white/10 bg-white/5 p-4 text-center">
+          <p class="text-sm text-white/80">Redirection vers le paiement sécurisé...</p>
+          <div class="mt-3 h-8 w-8 border-2 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        </div>
+
         <!-- Success State -->
         <div v-if="magicLinkSent" class="mt-6 rounded-xl bg-green-500/20 border border-green-500/30 p-4 text-center">
           <p class="text-green-300 font-medium">✓ Lien envoyé !</p>
           <p class="text-sm text-green-200/70 mt-1">Vérifiez votre boîte mail pour continuer.</p>
+        </div>
+
+        <div v-if="checkoutError" class="mt-6 rounded-xl bg-red-500/20 border border-red-500/30 p-4 text-center">
+          <p class="text-red-200 text-sm">{{ checkoutError }}</p>
         </div>
 
         <!-- Info -->
@@ -100,9 +109,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth.js'
 import { useGuestStore } from '../stores/guest.js'
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8787'
+const STRIPE_PRICE_ID = import.meta.env.VITE_STRIPE_PRICE_ID || 'price_premium_monthly'
 
 const authStore = useAuthStore()
 const guestStore = useGuestStore()
@@ -110,9 +122,51 @@ const guestStore = useGuestStore()
 const email = ref(guestStore.getGuestEmail() || '')
 const loading = ref(false)
 const magicLinkSent = ref(false)
+const checkoutError = ref(null)
+const checkoutLoading = ref(false)
+
+async function startCheckout() {
+  if (!authStore.isAuthenticated || checkoutLoading.value) return
+  
+  checkoutLoading.value = true
+  checkoutError.value = null
+  
+  try {
+    const res = await fetch(`${API_URL}/api/stripe/checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authStore.token}`
+      },
+      body: JSON.stringify({
+        priceId: STRIPE_PRICE_ID,
+        successUrl: `${window.location.origin}/dashboard?success=true`,
+        cancelUrl: `${window.location.origin}/checkout?canceled=true`
+      })
+    })
+    
+    const data = await res.json()
+    
+    if (!res.ok) {
+      throw new Error(data.error || 'Erreur paiement')
+    }
+    
+    if (data?.url) {
+      window.location.href = data.url
+      return
+    }
+    
+    throw new Error('URL de paiement manquante')
+  } catch (e) {
+    checkoutError.value = e.message
+  } finally {
+    checkoutLoading.value = false
+  }
+}
 
 async function handleSubmit() {
   loading.value = true
+  localStorage.setItem('bp_redirect_after_login', '/checkout')
   
   try {
     // Save email to guest store
@@ -127,4 +181,12 @@ async function handleSubmit() {
     loading.value = false
   }
 }
+
+onMounted(() => {
+  if (authStore.isAuthenticated) {
+    startCheckout()
+  } else if (!localStorage.getItem('bp_redirect_after_login')) {
+    localStorage.setItem('bp_redirect_after_login', '/checkout')
+  }
+})
 </script>

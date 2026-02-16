@@ -102,6 +102,10 @@
             </button>
           </form>
 
+          <p v-if="submitError" class="mt-4 text-sm text-red-300">
+            {{ submitError }}
+          </p>
+
           <p class="mt-4 text-xs text-white/50">
             Vos informations restent privees et servent uniquement a personnaliser votre experience.
           </p>
@@ -126,25 +130,50 @@ const form = reactive({
 })
 
 const isSubmitting = ref(false)
+const submitError = ref(null)
 
 const isValid = computed(() => {
   return !!(form.name.trim() && form.company.trim() && form.goal.trim())
 })
 
-function submitOnboarding() {
+async function submitOnboarding() {
   if (!isValid.value || isSubmitting.value) return
 
   isSubmitting.value = true
-  authStore.completeOnboarding({
-    name: form.name.trim(),
-    company: form.company.trim(),
-    goal: form.goal.trim(),
-    completedAt: new Date().toISOString()
-  })
-  router.push('/dashboard')
+  submitError.value = null
+  
+  try {
+    const data = await authStore.completeOnboarding({
+      name: form.name.trim(),
+      company: form.company.trim(),
+      goal: form.goal.trim()
+    })
+    
+    if (data?.businessPlanId) {
+      router.push(`/funnel/${data.businessPlanId}`)
+    } else {
+      router.push('/dashboard')
+    }
+  } catch (e) {
+    submitError.value = authStore.error || e.message
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  if (!authStore.isAuthenticated) {
+    localStorage.setItem('bp_redirect_after_login', '/onboarding')
+    router.replace('/login')
+    return
+  }
+  
+  try {
+    await authStore.fetchOnboardingStatus()
+  } catch (e) {
+    // Ignore status errors for now
+  }
+  
   if (authStore.onboardingCompleted) {
     router.replace('/dashboard')
   }
