@@ -1,0 +1,62 @@
+{
+  "lastUpdated": "2026-02-16T09:20:00",
+  "sprint": {
+    "number": 1,
+    "endTime": "10:45",
+    "mode": "URGENCE_2H"
+  },
+  "agents": {
+    "BackendAgent": {
+      "issue": 55,
+      "task": "Security basique",
+      "lastReport": null,
+      "lastActivity": "2026-02-16T08:55:00",
+      "minutesSinceActivity": 25,
+      "status": "🟡 Attendu",
+      "action": "Monitor - Premier report attendu avant 09:45"
+    },
+    "QAEngineer": {
+      "issue": 52,
+      "task": "Tests coverage",
+      "lastReport": null,
+      "lastActivity": "2026-02-16T08:55:00",
+      "minutesSinceActivity": 25,
+      "status": "🟡 Attendu",
+      "action": "Monitor - Premier report attendu avant 09:45"
+    },
+    "DevOpsAgent": {
+      "issue": 48,
+      "task": "Support tests",
+      "lastReport": null,
+      "lastActivity": "2026-02-16T08:55:00",
+      "minutesSinceActivity": 25,
+      "status": "🟡 Attendu",
+      "action": "Monitor - Premier report attendu avant 09:45"
+    },
+    "FrontendAgent": {
+      "issue": 66,
+      "task": "Onboarding simple",
+      "lastReport": null,
+      "lastActivity": "2026-02-16T08:55:00",
+      "minutesSinceActivity": 25,
+      "status": "🟡 Optionnel",
+      "action": "Monitor - Optionnel, peut aider sur tests"
+    },
+    "UXDesigner": {
+      "issue": null,
+      "task": "Reporté Sprint #2",
+      "lastReport": "2026-02-16T09:15:00",
+      "lastActivity": "2026-02-16T09:15:00",
+      "minutesSinceActivity": 5,
+      "status": "🟢 OK",
+      "action": "Aucune - Reporté au prochain sprint"
+    }
+  },
+  "alerts": {
+    "level": "🟢 Normal",
+    "silentAgents": [],
+    "overdueReports": [],
+    "needsEscalation": false
+  },
+  "nextCheck": "2026-02-16T09:30:00"
+}
