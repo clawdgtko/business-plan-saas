@@ -1,73 +1,43 @@
 # 🎯 SPRINT SYSTEM - Business Plan SaaS
 
-**Sprint Actif:** #1  
-**Date début:** 2026-02-16 08:45  
+**Sprint Actif:** #2  
+**Date début:** 2026-02-16 09:30  
 **Durée:** 2h max  
-**Fin prévue:** 2026-02-16 10:45  
+**Fin prévue:** 2026-02-16 11:30  
 **Status:** 🟡 EN COURS
 
 ---
 
-## 📋 Sprint #1 - Fondations
+## 📋 Sprint #2 - Polish & Scale
 
 ### Objectif
-Avoir une app fonctionnelle avec auth, CRUD business plan, et paiement basique.
+Finaliser le MVP avec tests, documentation et intégration complète.
 
 ### Livrables attendus
-- [x] Auth Magic Link fonctionnel
-- [x] CRUD Business Plan opérationnel
-- [x] Stripe Checkout intégré
-- [x] CI/CD GitHub Actions
-- [x] App déployée sur Cloudflare
 - [ ] Tests coverage > 80%
-- [ ] Documentation API
-- [ ] Feature flags basiques
+- [ ] Documentation API (Swagger/OpenAPI)
+- [ ] Persistence onboarding (backend)
+- [ ] Intégration frontend-backend onboarding
+- [ ] Déploiement production
+- [ ] README complet
 
 ---
 
 ## 👥 Rôles & Responsabilités
 
 ### @ProductManager (PM)
-**Rapport:** Tous les jours à 9h + fin de sprint  
+**Rapport:** Toutes les heures + fin de sprint  
 **Responsabilités:**
-- Définir les user stories
-- Prioriser le backlog
-- Valider les livrables
+- Valider la qualité du MVP
+- Prioriser les bugs vs features
 - Reporter à Grégoire
 
 ### @LeadDev (Lead)
-**Rapport:** Tous les jours à 9h + fin de sprint  
+**Rapport:** Toutes les heures + fin de sprint  
 **Responsabilités:**
-- Architecture et revue de code
-- Qualité et standards
-- Validation des PRs
-- Unblocking de l'équipe
-
----
-
-## 🔄 Workflow Sprint
-
-```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   PLAN      │ →  │   BUILD     │ →  │   REVIEW    │
-│  (PM+Lead)  │    │  (Agents)   │    │  (PM+Lead)  │
-└─────────────┘    └─────────────┘    └──────┬──────┘
-                                             │
-                    ┌────────────────────────┘
-                    ▼
-           ┌─────────────┐
-           │   FINISH    │
-           │  (Livrable) │
-           └──────┬──────┘
-                  │
-    ┌─────────────┴─────────────┐
-    ▼                           ▼
-┌──────────┐              ┌──────────┐
-│  ✓ OK    │              │  ✗ KO    │
-│ Nouveau  │              │ Continue │
-│ Sprint   │              │ Sprint   │
-└──────────┘              └──────────┘
-```
+- Review qualité code
+- Validation tests coverage
+- Architecture finale
 
 ---
 
@@ -75,66 +45,35 @@ Avoir une app fonctionnelle avec auth, CRUD business plan, et paiement basique.
 
 | Agent | Tâche | Status | PR |
 |-------|-------|--------|-----|
-| @BackendAgent | Security & Secrets | 🟡 En cours | - |
-| @FrontendAgent | Onboarding | 🟡 En cours | - |
-| @DevOpsAgent | Monitoring | 🟡 En cours | - |
-| @QAEngineer | Feature Flags | 🟡 En cours | - |
-| @UXDesigner | User Journey | 🟡 En cours | - |
+| @BackendAgent | Tests API + Persistence onboarding | 🟡 À démarrer | - |
+| @FrontendAgent | Intégration onboarding + Tests E2E | 🟡 À démarrer | - |
+| @DevOpsAgent | Déploiement prod + Monitoring | 🟡 À démarrer | - |
+| @QAEngineer | Tests coverage + Documentation | 🟡 À démarrer | - |
 
 ---
 
 ## ✅ Checklist Fin de Sprint
 
 ### PM doit valider :
-- [ ] Toutes les user stories sont complètes
-- [ ] Le produit est utilisable (end-to-end)
-- [ ] Les critères d'acceptation sont OK
-- [ ] Démo fonctionnelle possible
+- [ ] MVP fonctionnel end-to-end
+- [ ] Tests pass > 80% coverage
+- [ ] Documentation complète
+- [ ] Déployé en production
 
 ### Lead doit valider :
-- [ ] Code review fait sur toutes les PRs
-- [ ] Tests pass (coverage > 80%)
-- [ ] CI/CD vert
-- [ ] Pas de dette technique critique
-- [ ] Documentation à jour
-
-### Les deux doivent reporter à Grégoire :
-- [ ] Ce qui a été livré
-- [ ] Ce qui bloque (si applicable)
-- [ ] Plan pour prochain sprint
+- [ ] Code review final
+- [ ] Pas de dette critique
+- [ ] Architecture scalable
 
 ---
 
 ## 🚨 Règles
 
-1. **Pas de nouveau sprint** si l'actuel n'est pas terminé
-2. **Pas de merge sur main** sans validation PM+Lead
-3. **Daily report** obligatoire (même si court)
-4. **Sprint review** avec démo avant cloture
+1. **Sprint de 2h max**
+2. **Focus sur la qualité pas la quantité**
+3. **MVP doit être utilisable par un vrai utilisateur**
 
 ---
 
-## 📝 Template Rapport Quotidien (PM+Lead)
-
-```
-📅 Date: 2026-02-XX
-👥 Équipe: X agents actifs
-📊 Avancement: X%
-
-✅ Fait hier:
-- 
-
-🎯 Objectif aujourd'hui:
-- 
-
-🚧 Bloqueurs:
-- 
-
-📦 Livrable sprint: [date prévue]
-```
-
----
-
-*Dernière mise à jour: 2026-02-16 (Rapport PM envoyé à Grégoire)*  
-*Prochain rapport: 2026-02-17 09:00*  
-*Rapport courant: `/docs/reports/RAPPORT_2026-02-16.md`*
+*Démarré: 2026-02-16 09:30*  
+*Prochain rapport: 10:30*
